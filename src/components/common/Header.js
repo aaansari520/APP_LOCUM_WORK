@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Image from "../../assets/images/cart.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   CloseOutlined,
   LoginOutlined,
   LogoutOutlined,
-  SearchOutlined,
 } from "@ant-design/icons";
 import * as actionTypes from "../../Redux/Actions/action";
 import { Input } from "antd";
@@ -20,7 +19,6 @@ const AppHeader = ({
   removeFromWish,
 }) => {
   const [value, setValue] = useState("");
-  const navigate = useNavigate();
 
   // const submitHandler = (e, val) => {
   //   e.preventDefault();
