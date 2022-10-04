@@ -10,10 +10,6 @@ import {
 const SideBarMenu = () => {
   const navigate = useNavigate();
 
-  // const deleteItem = () => {
-  //   localStorage.removeItem("profile");
-  // };
-
   return (
     <div>
       <Menu

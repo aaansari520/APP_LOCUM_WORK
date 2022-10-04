@@ -17,8 +17,11 @@ const AppHeader = ({
   deleteFromProfile,
   removeFromCart,
   removeFromWish,
+  product,
 }) => {
   const [value, setValue] = useState("");
+
+  console.log("Products in Header", product);
 
   // const submitHandler = (e, val) => {
   //   e.preventDefault();
@@ -112,6 +115,7 @@ const mapStateToProps = (store) => {
   return {
     cart: store.cart,
     profile: store.profile,
+    product: store.products,
   };
 };
 

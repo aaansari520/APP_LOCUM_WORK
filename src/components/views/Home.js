@@ -14,7 +14,6 @@ const Home = ({
   cart,
   wish,
   addToCart,
-
   addToWish,
   search,
   profile,
