@@ -16,8 +16,27 @@ const initialState = {
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user, thunkAPI) => {
+    console.log("Register me data", user);
+    const check = Object.keys(user);
+    const val = Object.values(user);
+    console.log("Register me keys", user.append(check, val));
     try {
-      const resp = await customFetch.post("/api/users/sign_up.json", user);
+      const resp = await customFetch.post("/api/users/sign_up.json", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: user,
+        // {
+        // "user[firstName]": user.firstName,
+        // "user[lastName]": user.lastName,
+        // "user[phone]": user.phone,
+        // "user[email]": user.email,
+        // "user[deviceType]": user.deviceType,
+        // "user[player_id]": user.player_id,
+        // "user[password]": user.password,
+
+        // },
+      });
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -52,6 +71,7 @@ const userSlice = createSlice({
     },
     [registerUser.fulfilled]: (state, { payload }) => {
       const { user } = payload;
+      console.log("register payload", payload);
       console.log("payload", user);
       state.isLoading = false;
       state.user = user;

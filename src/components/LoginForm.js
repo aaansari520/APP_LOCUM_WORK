@@ -29,26 +29,36 @@ const Sign_Up = () => {
     // setFormErrors(validate(state));
   };
 
+  const formData = new FormData();
+
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     setState({ ...state });
     console.log("Submit per data", state);
+    formData.append("user[first_name]", state.firstName);
+    formData.append("user[last_name]", state.lastName);
+    formData.append("user[email]", state.email);
+    formData.append("user[phone]", state.phone);
+    formData.append("user[password]", state.password);
+    formData.append("device_detail[device_type]", state.deviceType);
+    formData.append("device_detail[player_id]", state.player_id);
     return dispatch(
       registerUser({
-        firstName: state.firstName,
-        lastName: state.lastName,
-        phone: state.phone,
-        email: state.email,
-        deviceType: state.deviceType,
-        player_id: state.player_id,
-        password: state.password,
+        // firstName: state.firstName,
+        // lastName: state.lastName,
+        // phone: state.phone,
+        // email: state.email,
+        // deviceType: state.deviceType,
+        // player_id: state.player_id,
+        // password: state.password,
+        formData,
       })
     );
   };
 
   return (
     <div>
-      <form className="Form">
+      {/* <form className="Form">
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -132,9 +142,10 @@ const Sign_Up = () => {
             Sign_Up
           </button>
         </div>
-      </form>
+      </form> */}
 
-      {/* <Form
+      <Form
+        className="Form"
         autoCapitalize="true"
         // autoComplete="off"
         labelCol={{ span: 10 }}
@@ -143,27 +154,33 @@ const Sign_Up = () => {
           const name = Object.keys(values);
           const value = Object.values(values);
           const entries = Object.entries(values);
-          console.log("keys in Name var", name);
-          console.log("value in Value var", value);
-          console.log("entries in Value var", entries);
-          console.log("kya milri values", values);
-          console.log("KEys mili", Object.keys(values));
-          setData({ ...data, [name]: value });
-          console.log("Datat check kar", data);
-          // const setYourData = [...data, { ...values }];
-          // setData(setYourData);
-          // const { email, firstName, lastName, password, phone, player_id } =
-          //   data;
-          // dispatch(
-          //   registerUser({
-          //     email,
-          //     firstName,
-          //     lastName,
-          //     password,
-          //     phone,
-          //     player_id,
-          //   })
-          // );
+          // console.log("keys in Name var", name);
+          // console.log("value in Value var", value);
+          // console.log("entries in Value var", entries);
+          // console.log("kya milri values", values);
+          // console.log("KEys mili", Object.keys(values));
+          setState({ ...state, ...values });
+          console.log("Datat check kar", state);
+          const setYourData = [{ ...values }];
+          setState(setYourData);
+          const { email, firstName, lastName, password, phone, player_id } =
+            state;
+          // const formData = new FormData();
+          formData.append(name, values);
+          dispatch(
+            registerUser(
+              formData
+              //   {
+              //   // email,
+              //   // firstName,
+              //   // lastName,
+              //   // password,
+              //   // phone,
+              //   // player_id,
+              //   values,
+              // }
+            )
+          );
         }}
         style={{ marginTop: "15px" }}
       >
@@ -286,7 +303,7 @@ const Sign_Up = () => {
             Register
           </Button>
         </Form.Item>
-      </Form> */}
+      </Form>
     </div>
   );
 };
