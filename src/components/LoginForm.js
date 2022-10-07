@@ -29,36 +29,37 @@ const Sign_Up = () => {
     // setFormErrors(validate(state));
   };
 
-  const formData = new FormData();
-
   const handleSubmit = (e) => {
-    // e.preventDefault();
-    setState({ ...state });
+    e.preventDefault();
+    // setState({ ...state });
+    const formData = new FormData();
+
     console.log("Submit per data", state);
-    formData.append("user[first_name]", state.firstName);
-    formData.append("user[last_name]", state.lastName);
-    formData.append("user[email]", state.email);
-    formData.append("user[phone]", state.phone);
-    formData.append("user[password]", state.password);
-    formData.append("device_detail[device_type]", state.deviceType);
-    formData.append("device_detail[player_id]", state.player_id);
+    formData.set("user[first_name]", state.firstName);
+    formData.set("user[last_name]", state.lastName);
+    formData.set("user[email]", state.email);
+    formData.set("user[phone]", state.phone);
+    formData.set("user[password]", state.password);
+    formData.set("device_detail[device_type]", state.deviceType);
+    formData.set("device_detail[player_id]", state.player_id);
+
+    console.log("Login me frm Data", Object.fromEntries(formData));
     return dispatch(
       registerUser({
-        // firstName: state.firstName,
-        // lastName: state.lastName,
-        // phone: state.phone,
-        // email: state.email,
-        // deviceType: state.deviceType,
-        // player_id: state.player_id,
-        // password: state.password,
-        formData,
+        firstName: state.firstName,
+        lastName: state.lastName,
+        phone: state.phone,
+        email: state.email,
+        deviceType: state.deviceType,
+        player_id: state.player_id,
+        password: state.password,
       })
     );
   };
 
   return (
     <div>
-      {/* <form className="Form">
+      <form className="Form">
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -142,9 +143,9 @@ const Sign_Up = () => {
             Sign_Up
           </button>
         </div>
-      </form> */}
+      </form>
 
-      <Form
+      {/* <Form
         className="Form"
         autoCapitalize="true"
         // autoComplete="off"
@@ -303,7 +304,7 @@ const Sign_Up = () => {
             Register
           </Button>
         </Form.Item>
-      </Form>
+      </Form> */}
     </div>
   );
 };
