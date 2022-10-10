@@ -11,6 +11,7 @@ import Home from "./components/cart/Home";
 import Cart from "./components/cart/Cart";
 import { getUserFromLocalStorage } from "./localStorage/LocalStorageData";
 import Verify from "./components/Verify";
+import Sign_In from "./components/Sign_in";
 
 function App() {
   const { user } = useSelector((store) => store.user);
@@ -21,6 +22,7 @@ function App() {
 
       <Routes>
         <Route exact path="/" element={<Sign_Up />} />
+        <Route exact path="/sign_in" element={<Sign_In />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/verify" element={<Verify />} />
           <Route path="/home" element={<Home />} />

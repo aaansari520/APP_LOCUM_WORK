@@ -1,24 +1,38 @@
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../Redux/userSlice";
 
 const Sign_In = () => {
+  const { user } = useSelector((store) => store.user);
   const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  var navigate = useNavigate();
   console.log("whole data", data);
   //   console.log("DOB", JSON.stringify(data.dob));
   //   console.log(localStorage.setItem("data", JSON.stringify(data)));
 
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
+    }
+  }, [user]);
+
   return (
-    <div style={{ margin: "0 auto", justifyContent: "center" }}>
+    <div className="form-Design">
       <Form
+        className="Form"
         autoCapitalize="true"
         // autoComplete="off"
         labelCol={{ span: 10 }}
         wrapperCol={{ span: 14 }}
         onFinish={(values) => {
-          const setYourData = [...data, { ...values }];
-          setData(setYourData);
+          dispatch(loginUser(values));
         }}
-        style={{ marginTop: "15px" }}
+        style={{ marginTop: "20px" }}
       >
         <Form.Item
           name="email"
@@ -50,12 +64,12 @@ const Sign_In = () => {
           <Input.Password placeholder="Type your password"></Input.Password>
         </Form.Item>
 
-        <Form.Item name="role" label="Role">
+        {/* <Form.Item name="role" label="Role">
           <Input placeholder="Type your role"></Input>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item
-          name="deviceType"
+          name="device_type"
           label="DeviceType"
           rules={[
             {
@@ -86,7 +100,7 @@ const Sign_In = () => {
 
         <Form.Item wrapperCol={{ span: 24 }}>
           <Button block type="primary" htmlType="submit">
-            Register
+            Sign_In
           </Button>
         </Form.Item>
       </Form>

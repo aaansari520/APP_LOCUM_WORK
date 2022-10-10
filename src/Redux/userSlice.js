@@ -18,6 +18,7 @@ const initialState = {
   isLoading: false,
   user: getUserFromLocalStorage(),
   auth: getVerifyAuthTokenFromLocalStorage(),
+  sign_in: false,
   //   user: [],
 };
 
@@ -81,8 +82,22 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
+    console.log("login", user);
+    const data = {
+      device_detail: {
+        device_type: user.device_type,
+        player_id: user.player_id,
+      },
+      user: { email: user.email, password: user.password },
+    };
     try {
-      const resp = await customFetch.post("/api/users/sign_in.json", user);
+      // const resp = await customFetch.post("/api/users/sign_in.json", user);
+      const resp = await customFetch({
+        url: "/api/users/sign_in.json",
+        method: "POST",
+        data: data,
+      });
+      console.log("loginUser me data", resp.data);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -188,12 +203,13 @@ const userSlice = createSlice({
     [loginUser.pending]: (state) => {
       state.isLoading = true;
     },
-    [loginUser.fulfilled]: (state, { payload }) => {
-      const { user } = payload;
+    [loginUser.fulfilled]: (state, actions) => {
+      const user = actions.payload.data.phone;
+      console.log("user kya mila sign in me", user);
       state.isLoading = false;
       state.user = user;
       addUserToLocalStorage(user);
-      toast.success(`Welcome Back ${user.name}`);
+      // toast.success(`Welcome Back ${user.name}`);
     },
     [loginUser.rejected]: (state, { payload }) => {
       state.isLoading = false;

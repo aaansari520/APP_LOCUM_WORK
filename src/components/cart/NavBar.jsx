@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser, logoutUser } from "../../Redux/userSlice";
+import { Button } from "antd";
 
 const NavBar = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -9,9 +10,15 @@ const NavBar = () => {
   return (
     <div className="nav-bar">
       {!user ? (
-        <Link to="/">
-          <h2 style={{ marginTop: "15px" }}>User Authentication App</h2>
-        </Link>
+        <>
+          <Link to="/">
+            <h2 style={{ marginTop: "15px" }}>User Authentication App</h2>
+          </Link>
+
+          <Link to="/sign_in">
+            <Button>Sign_In</Button>
+          </Link>
+        </>
       ) : (
         <Link to="/home">
           <h2 style={{ marginTop: "15px" }}>The Shop For You</h2>
