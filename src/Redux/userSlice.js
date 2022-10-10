@@ -17,6 +17,7 @@ import {
 const initialState = {
   isLoading: false,
   user: getUserFromLocalStorage(),
+  auth: getVerifyAuthTokenFromLocalStorage(),
   //   user: [],
 };
 
@@ -117,7 +118,7 @@ export const logOutUser = createAsyncThunk(
     try {
       // const resp = await customFetch.post("/api/users/sign_in.json", user);
       const resp = await customFetch({
-        url: "/api/users/sign_up.json",
+        url: "/api/users/sign_out.json",
         method: "DELETE",
         headers: {
           AUTH_TOKEN: getVerifyAuthTokenFromLocalStorage(),

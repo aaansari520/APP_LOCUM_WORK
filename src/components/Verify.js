@@ -1,11 +1,21 @@
 import { Button, Form, Input } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { verifyUser } from "../Redux/userSlice";
 
 const Verify = () => {
-  const { user } = useSelector((store) => store.user);
+  const { user, auth } = useSelector((store) => store.user);
   const dispatch = useDispatch();
+  var navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth) {
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
+    }
+  }, [auth]);
 
   return (
     <div className="home-container">

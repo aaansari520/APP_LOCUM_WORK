@@ -43,8 +43,12 @@ export const getAuthTokenFromLocalStorage = () => {
 
 export const getVerifyAuthTokenFromLocalStorage = () => {
   const result = localStorage.getItem("auth");
-  const auth = result ? JSON.parse(result) : null;
-  console.log("getVerifyAuthTokenFromLocalStorage funct", auth);
+  const auth1 = result ? JSON.parse(result) : null;
+  console.log(
+    "getVerifyAuthTokenFromLocalStorage funct",
+    JSON.stringify(auth1)
+  );
+  const ret = JSON.stringify(auth1);
   console.log("result in get user funct", result);
-  return auth;
+  return auth1;
 };
