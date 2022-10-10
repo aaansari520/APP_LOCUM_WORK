@@ -1,6 +1,7 @@
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { registerUser } from "../Redux/userSlice";
 
 const initialState = {
@@ -14,13 +15,10 @@ const initialState = {
 };
 
 const Sign_Up = () => {
+  const { user } = useSelector((store) => store.user);
   const [state, setState] = useState(initialState);
-  // console.log("whole data", state);
+  var navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoading, user } = useSelector((store) => store.user);
-
-  //   console.log("DOB", JSON.stringify(data.dob));
-  //   console.log(localStorage.setItem("data", JSON.stringify(data)));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,19 +29,6 @@ const Sign_Up = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setState({ ...state });
-    const formData = new FormData();
-
-    console.log("Submit per data", state);
-    formData.set("user[first_name]", state.firstName);
-    formData.set("user[last_name]", state.lastName);
-    formData.set("user[email]", state.email);
-    formData.set("user[phone]", state.phone);
-    formData.set("user[password]", state.password);
-    formData.set("device_detail[device_type]", state.deviceType);
-    formData.set("device_detail[player_id]", state.player_id);
-
-    console.log("Login me frm Data", Object.fromEntries(formData));
     return dispatch(
       registerUser({
         firstName: state.firstName,
@@ -57,9 +42,17 @@ const Sign_Up = () => {
     );
   };
 
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate("/verify");
+      }, 2000);
+    }
+  }, [user]);
+
   return (
-    <div>
-      <form className="Form">
+    <div className="form-Design">
+      {/* <form className="Form">
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -134,87 +127,24 @@ const Sign_Up = () => {
             // formErrors={formErrors}
           />
         </div>
-        <div>
-          <button
-            type="submit"
-            className="btn btn-block"
-            onClick={handleSubmit}
-          >
-            Sign_Up
-          </button>
-        </div>
-      </form>
+        <Link to="/home" onClick={handleSubmit}>
+          {/* <Button type="submit" className="btn btn-block"> */}
+      {/* Sign_Up */}
+      {/* </Button> */}
+      {/* </Link> */}
+      {/* </form>  */}
 
-      {/* <Form
+      <Form
         className="Form"
-        autoCapitalize="true"
         // autoComplete="off"
         labelCol={{ span: 10 }}
         wrapperCol={{ span: 14 }}
+        initialValues={{ role: "doctor" }}
         onFinish={(values) => {
-          const name = Object.keys(values);
-          const value = Object.values(values);
-          const entries = Object.entries(values);
-          // console.log("keys in Name var", name);
-          // console.log("value in Value var", value);
-          // console.log("entries in Value var", entries);
-          // console.log("kya milri values", values);
-          // console.log("KEys mili", Object.keys(values));
-          setState({ ...state, ...values });
-          console.log("Datat check kar", state);
-          const setYourData = [{ ...values }];
-          setState(setYourData);
-          const { email, firstName, lastName, password, phone, player_id } =
-            state;
-          // const formData = new FormData();
-          formData.append(name, values);
-          dispatch(
-            registerUser(
-              formData
-              //   {
-              //   // email,
-              //   // firstName,
-              //   // lastName,
-              //   // password,
-              //   // phone,
-              //   // player_id,
-              //   values,
-              // }
-            )
-          );
+          dispatch(registerUser(values));
         }}
-        style={{ marginTop: "15px" }}
+        style={{ marginTop: "20px" }}
       >
-        <Form.Item
-          name="email"
-          label="Email"
-          rules={[
-            {
-              required: true,
-              message: "This Field is Required!",
-            },
-            { whitespace: true },
-            { type: "email", message: "Email is not valid" },
-          ]}
-          hasFeedback
-        >
-          <Input placeholder="Type your email" type="email"></Input>
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          label="Password"
-          rules={[
-            {
-              required: true,
-              message: "This Field is Required!",
-            },
-          ]}
-          hasFeedback
-        >
-          <Input.Password placeholder="Type your password"></Input.Password>
-        </Form.Item>
-
         <Form.Item
           name="firstName"
           label="First Name"
@@ -252,6 +182,22 @@ const Sign_Up = () => {
         </Form.Item>
 
         <Form.Item
+          name="email"
+          label="Email"
+          rules={[
+            {
+              required: true,
+              message: "This Field is Required!",
+            },
+            { whitespace: true },
+            { type: "email", message: "Email is not valid" },
+          ]}
+          hasFeedback
+        >
+          <Input placeholder="Type your email" type="email"></Input>
+        </Form.Item>
+
+        <Form.Item
           name="phone"
           label="Phone"
           rules={[
@@ -262,11 +208,83 @@ const Sign_Up = () => {
             {
               whitespace: true,
             },
-            { min: 10, message: "Name must contain 10 characters" },
+            { min: 13, message: "Phone must contain 13 numbers" },
+            { max: 14, message: "Limit exceeded" },
           ]}
           hasFeedback
         >
           <Input placeholder="Type your fullName"></Input>
+        </Form.Item>
+
+        <Form.Item
+          name="gender"
+          label="Gender"
+          rules={[
+            {
+              required: true,
+              message: "This Field is Required!",
+            },
+          ]}
+        >
+          <Select placeholder="Gender">
+            {["male", "female", "transgender"].map((gender, index) => {
+              return (
+                <Select.Option value={gender} allowClear key={index}>
+                  {gender}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[
+            {
+              required: true,
+              message: "This Field is Required!",
+            },
+            {
+              // type: "regexp", ye use karneki zrurat nahi hai
+              pattern: new RegExp(
+                "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+              ),
+              message: "Pattern is not matching the requirement",
+            },
+          ]}
+          hasFeedback
+        >
+          <Input.Password placeholder="Type your password"></Input.Password>
+        </Form.Item>
+
+        <Form.Item
+          name="confirmpassword"
+          label="Confirm Password"
+          dependencies={["password"]}
+          rules={[
+            {
+              required: true,
+              message: "This Field is Required!",
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  "Confirm Password is not matching with the Password!"
+                );
+              },
+            }),
+          ]}
+          hasFeedback
+        >
+          <Input.Password placeholder="Type your Confirm password"></Input.Password>
+        </Form.Item>
+
+        <Form.Item name="role" label="Role" hasFeedback>
+          <Input readOnly></Input>
         </Form.Item>
 
         <Form.Item
@@ -301,10 +319,10 @@ const Sign_Up = () => {
 
         <Form.Item wrapperCol={{ span: 24 }}>
           <Button block type="primary" htmlType="submit">
-            Register
+            Sign_Up
           </Button>
         </Form.Item>
-      </Form> */}
+      </Form>
     </div>
   );
 };

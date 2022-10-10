@@ -80,13 +80,13 @@ const cartSlice = createSlice({
           cartQuantity: state.cartItems[existingIndex].cartQuantity + 1,
         };
         toast.info("Increased product quantity", {
-          position: "bottom-left",
+          position: "top-left",
         });
       } else {
         let tempProductItem = { ...action.payload, cartQuantity: 1 };
         state.cartItems.push(tempProductItem);
         toast.success("Product added to cart", {
-          position: "bottom-left",
+          position: "top-left",
         });
       }
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
@@ -110,7 +110,7 @@ const cartSlice = createSlice({
         state.cartItems = nextCartItems;
 
         toast.error("Product removed from cart", {
-          position: "bottom-left",
+          position: "top-left",
         });
       }
 

@@ -1,11 +1,17 @@
-import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-const ProtectedRoute = ({ children }) => {
+import { Navigate, Outlet } from "react-router-dom";
+import Sign_Up from "../components/LoginForm";
+// const ProtectedRoute = ({ children }) => {
+//   const { user } = useSelector((store) => store.user);
+//   if (!user) {
+//     return <Navigate to="/" replace />;
+//   }
+//   return children;
+// };
+
+const ProtectedRoute = () => {
   const { user } = useSelector((store) => store.user);
-  if (!user) {
-    return <Navigate to="/" />;
-  }
-  return children;
+  return user ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

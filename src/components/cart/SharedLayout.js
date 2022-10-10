@@ -6,7 +6,7 @@ import NavBar from "./NavBar";
 const SharedLayout = () => {
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <Home />
       <Cart />
     </div>
