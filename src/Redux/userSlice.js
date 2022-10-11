@@ -1,13 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
 import { toast } from "react-toastify";
 import customFetch from "../axios/axios";
 import {
   addAuthTokenToLocalStorage,
+  addPatientToLocalStorage,
   addUserToLocalStorage,
   addVerifyAuthTokenToLocalStorage,
+  getPatientsFromLocalStorage,
   getUserFromLocalStorage,
   getVerifyAuthTokenFromLocalStorage,
+  removeAuthTokenFromLocalStorage,
+  removePatientsFromLocalStorage,
   removeUserFromLocalStorage,
   removeVerifyAuthTokenFromLocalStorage,
 } from "../localStorage/LocalStorageData";
@@ -17,6 +20,8 @@ const initialState = {
   user: getUserFromLocalStorage(),
   auth: getVerifyAuthTokenFromLocalStorage(),
   showNav: true,
+  userData: getPatientsFromLocalStorage(),
+  showPatient: false,
 };
 
 export const registerUser = createAsyncThunk(
@@ -53,6 +58,29 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const getUser = createAsyncThunk("user/getUser", async (_, thunkAPI) => {
+  try {
+    const resp = await customFetch({
+      url: "/api/doctor/patients.json",
+      method: "GET",
+      params: {
+        search: "Shahkhalid",
+      },
+      headers: {
+        auth_token: getVerifyAuthTokenFromLocalStorage(),
+      },
+    });
+    console.log("getUser me response", resp.data);
+    return resp.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.resp.message);
+  }
+});
+
+// catch (error) {
+//   return thunkAPI.rejectWithValue(error.resp.message);
+// }
+
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
@@ -87,7 +115,7 @@ export const verifyUser = createAsyncThunk(
         method: "POST",
         data: user,
       });
-
+      console.log("Verifying user me data", resp.data);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.resp.message);
@@ -106,7 +134,7 @@ export const logOutUser = createAsyncThunk(
           AUTH_TOKEN: getVerifyAuthTokenFromLocalStorage(),
         },
       });
-      console.log("thunkAPI.getState().user.user.token", thunkAPI.getState());
+      console.log("logOutUser me data", resp.data);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.resp.message);
@@ -158,13 +186,15 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [verifyUser.fulfilled]: (state, actions) => {
-      state.showNav = true;
-      const verifyAuthToken = actions.payload?.data.user.auth_token;
-      addVerifyAuthTokenToLocalStorage(verifyAuthToken);
-      state.auth = verifyAuthToken;
-      state.isLoading = false;
-
-      // toast.success(`Welcome Back ${user.name}`);
+      if (actions.payload.status === 200) {
+        state.showNav = true;
+        const verifyAuthToken = actions.payload?.data.user.auth_token;
+        addVerifyAuthTokenToLocalStorage(verifyAuthToken);
+        state.auth = verifyAuthToken;
+        toast.success(`${actions.payload.message}`);
+      } else {
+        toast.error(`${actions.payload.message}`);
+      }
     },
     [verifyUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
@@ -175,8 +205,9 @@ const userSlice = createSlice({
     },
     [loginUser.fulfilled]: (state, actions) => {
       if (actions.payload.status === 200) {
+        state.showNav = false;
         const user = actions.payload.data;
-        // console.log("user kya mila sign in me", user);
+        console.log("user kya mila sign in me", actions);
         state.isLoading = false;
         state.user = user;
         addUserToLocalStorage(user);
@@ -197,12 +228,34 @@ const userSlice = createSlice({
 
       state.user = null;
       state.auth = null;
-      // removeAuthTokenFromLocalStorage();
+      removeAuthTokenFromLocalStorage();
       removeUserFromLocalStorage();
       removeVerifyAuthTokenFromLocalStorage();
+      removePatientsFromLocalStorage();
       toast.success(`${actions.payload.message}`);
     },
     [logOutUser.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.error(payload);
+    },
+    [getUser.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getUser.fulfilled]: (state, actions) => {
+      state.isLoading = true;
+      if (actions.payload.status === 200) {
+        // state.showNav = false;
+        console.log("User Data", actions.payload.data);
+        state.userData = actions.payload.data;
+        addPatientToLocalStorage(state.userData);
+        state.showPatient = true;
+        state.isLoading = false;
+        toast.success(`${actions.payload.message}`);
+      } else {
+        toast.error(`${actions.payload.message}`);
+      }
+    },
+    [getUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
       toast.error(payload);
     },

@@ -13,8 +13,11 @@ import { getUserFromLocalStorage } from "./localStorage/LocalStorageData";
 import Verify from "./components/Verify";
 import SignIn from "./components/Sign_in";
 
+import PatientTable from "./components/table/Table";
+import { Modal } from "antd";
+
 function App() {
-  const { showNav } = useSelector((store) => store.user);
+  const { showNav, showPatient } = useSelector((store) => store.user);
   getUserFromLocalStorage();
   return (
     <BrowserRouter>
@@ -23,9 +26,14 @@ function App() {
         <Route exact path="/" element={<SignUp />} />
         <Route exact path="/sign_in" element={<SignIn />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/verify" element={<Verify />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
+          {showPatient ? (
+            <Route exact path="/table" element={<PatientTable />} />
+          ) : (
+            "Please verify you self..."
+          )}
+          <Route exact path="/verify" element={<Verify />} />
+          <Route exact path="/home" element={<Home />} />
+          <Route exact path="/cart" element={<Cart />} />
         </Route>
       </Routes>
       <ToastContainer />

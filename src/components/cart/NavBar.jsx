@@ -1,21 +1,22 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logOutUser } from "../../Redux/userSlice";
-import { Button } from "antd";
+import { getUser, logOutUser } from "../../Redux/userSlice";
 
 const NavBar = () => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { user, auth } = useSelector((state) => state.user);
+  const { auth } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   return (
     <div className="nav-bar">
-      {!user ? (
+      {!auth ? (
         <>
           <Link to="/">
             <h2 style={{ marginTop: "15px" }}>User Authentication App</h2>
           </Link>
           <Link to="/sign_in">
-            <button>Sign In</button>
+            <button style={{ color: "yellow", fontWeight: "bold" }}>
+              Sign In
+            </button>
           </Link>
         </>
       ) : (
@@ -24,7 +25,7 @@ const NavBar = () => {
         </Link>
       )}
 
-      {user ? (
+      {auth ? (
         <Link to="/cart">
           <div className="nav-bag">
             <svg
@@ -47,9 +48,27 @@ const NavBar = () => {
         ""
       )}
 
-      <button onClick={() => dispatch(logOutUser())}>
-        {user ? "Logout" : ""}
-      </button>
+      {auth ? (
+        <>
+          <Link to="/table">
+            <button
+              onClick={() => dispatch(getUser())}
+              style={{ color: "darkblue", fontWeight: "bold" }}
+            >
+              Get Patients
+            </button>
+          </Link>
+
+          <button
+            onClick={() => dispatch(logOutUser())}
+            style={{ color: "red", fontWeight: "bold" }}
+          >
+            {auth ? "Logout" : ""}
+          </button>
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

@@ -15,55 +15,64 @@ const Verify = () => {
         navigate("/home");
       }, 2000);
     }
-  }, [auth, user]);
+  }, [auth]);
 
   return (
-    <div className="home-container">
-      <div className="form-Design">
-        <Form
-          className="Form"
-          labelCol={{ span: 10 }}
-          wrapperCol={{ span: 14 }}
-          initialValues={{
-            phone: user.phone,
-            role: user.role,
-          }}
-          onFinish={(values) => {
-            console.log("Verify me otp", values);
-            dispatch(verifyUser(values));
+    // <div className="home-container">
+    <div className="form-Design signinForm">
+      <Form
+        className="Form"
+        labelCol={{ span: 10 }}
+        wrapperCol={{ span: 14 }}
+        initialValues={{
+          phone: user.phone,
+          role: user.role,
+        }}
+        onFinish={(values) => {
+          console.log("Verify me otp", values);
+          dispatch(verifyUser(values));
+        }}
+      >
+        <Form.Item
+          label="Enter OTP"
+          name="otp"
+          rules={[
+            {
+              required: true,
+              message: "This field is required!",
+            },
+          ]}
+        >
+          <Input></Input>
+        </Form.Item>
+
+        <Form.Item label="Phone No." name="phone">
+          <Input readOnly></Input>
+        </Form.Item>
+
+        <Form.Item label="Role" name="role">
+          <Input readOnly></Input>
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{ span: 12 }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <Form.Item label="Enter OTP" name="otp">
-            <Input></Input>
-          </Form.Item>
-
-          <Form.Item label="Phone No." name="phone">
-            <Input readOnly></Input>
-          </Form.Item>
-
-          <Form.Item label="Role" name="role">
-            <Input readOnly></Input>
-          </Form.Item>
-
-          <Form.Item
-            wrapperCol={{ span: 12 }}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ padding: "5px 50px" }}
           >
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ padding: "5px 50px" }}
-            >
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
+    // </div>
   );
 };
 

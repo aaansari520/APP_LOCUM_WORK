@@ -9,13 +9,22 @@ const SignIn = () => {
   const dispatch = useDispatch();
   var navigate = useNavigate();
   const formRef = React.createRef();
+
   useEffect(() => {
     if (user) {
       setTimeout(() => {
-        navigate("/home");
+        navigate("/verify");
       }, 2000);
     }
   }, [user]);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     setTimeout(() => {
+  //       navigate("/home");
+  //     }, 2000);
+  //   }
+  // }, [user]);
 
   return (
     <div className="form-Design signinForm">
@@ -100,7 +109,12 @@ const SignIn = () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 24 }}>
-          <Button block type="primary" htmlType="submit">
+          <Button
+            block
+            type="primary"
+            htmlType="submit"
+            style={{ padding: "5px 50px" }}
+          >
             Sign In
           </Button>
         </Form.Item>
