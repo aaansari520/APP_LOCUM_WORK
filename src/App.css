@@ -72,6 +72,10 @@ body {
   font-size: 20px;
 }
 
+#root {
+  padding-top: 70px;
+}
+
 /* NavBar */
 
 .nav-bar {
@@ -81,6 +85,11 @@ body {
   justify-content: space-around;
   align-items: center;
   padding: 0 4rem;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
 }
 .nav-bar a {
   text-decoration: none;
@@ -370,7 +379,34 @@ body {
 /* >>>>>>Form-Design<<<<<< */
 .form-Design {
   width: 100%;
+  margin-top: 50px;
+  /* justify-content: space-around;
+  align-items: center; */
+}
+.signinForm {
+  width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+.form-Design:not(.signinForm) form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-Design:not(.signinForm) form .inner {
+  width: 100%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.form-Design:not(.signinForm) form .form-btn {
+  width: 300px;
+}
+.form-Design:not(.signinForm) form .form-btn button {
+  width: 300px;
+}
+
+.ant-form-item-has-error {
+  padding-bottom: 10px !important;
 }

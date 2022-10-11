@@ -7,7 +7,6 @@ import {
   getTotals,
   removeFromCart,
 } from "../../Redux/cartSlice";
-
 import { Link } from "react-router-dom";
 
 const Cart = () => {

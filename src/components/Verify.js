@@ -15,7 +15,7 @@ const Verify = () => {
         navigate("/home");
       }, 2000);
     }
-  }, [auth]);
+  }, [auth, user]);
 
   return (
     <div className="home-container">

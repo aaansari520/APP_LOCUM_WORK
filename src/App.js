@@ -2,7 +2,7 @@ import "antd/dist/antd.min.css";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Sign_Up from "./components/LoginForm";
+import SignUp from "./components/LoginForm";
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./components/cart/NavBar";
 import { useSelector } from "react-redux";
@@ -11,18 +11,17 @@ import Home from "./components/cart/Home";
 import Cart from "./components/cart/Cart";
 import { getUserFromLocalStorage } from "./localStorage/LocalStorageData";
 import Verify from "./components/Verify";
-import Sign_In from "./components/Sign_in";
+import SignIn from "./components/Sign_in";
 
 function App() {
-  const { user } = useSelector((store) => store.user);
+  const { showNav } = useSelector((store) => store.user);
   getUserFromLocalStorage();
   return (
     <BrowserRouter>
-      <NavBar />
-
+      {showNav && <NavBar />}
       <Routes>
-        <Route exact path="/" element={<Sign_Up />} />
-        <Route exact path="/sign_in" element={<Sign_In />} />
+        <Route exact path="/" element={<SignUp />} />
+        <Route exact path="/sign_in" element={<SignIn />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/verify" element={<Verify />} />
           <Route path="/home" element={<Home />} />

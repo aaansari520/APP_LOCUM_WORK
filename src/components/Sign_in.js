@@ -1,18 +1,14 @@
-import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Form, Input } from "antd";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../Redux/userSlice";
 
-const Sign_In = () => {
+const SignIn = () => {
   const { user } = useSelector((store) => store.user);
-  const [data, setData] = useState([]);
   const dispatch = useDispatch();
   var navigate = useNavigate();
-  console.log("whole data", data);
-  //   console.log("DOB", JSON.stringify(data.dob));
-  //   console.log(localStorage.setItem("data", JSON.stringify(data)));
-
+  const formRef = React.createRef();
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -22,7 +18,7 @@ const Sign_In = () => {
   }, [user]);
 
   return (
-    <div className="form-Design">
+    <div className="form-Design signinForm">
       <Form
         className="Form"
         autoCapitalize="true"
@@ -31,7 +27,9 @@ const Sign_In = () => {
         wrapperCol={{ span: 14 }}
         onFinish={(values) => {
           dispatch(loginUser(values));
+          formRef.current.resetFields();
         }}
+        ref={formRef}
         style={{ marginTop: "20px" }}
       >
         <Form.Item
@@ -58,19 +56,22 @@ const Sign_In = () => {
               required: true,
               message: "This Field is Required!",
             },
+            {
+              // type: "regexp", ye use karneki zrurat nahi hai
+              pattern: new RegExp(
+                "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+              ),
+              message: "Pattern is not matching the requirement",
+            },
           ]}
           hasFeedback
         >
           <Input.Password placeholder="Type your password"></Input.Password>
         </Form.Item>
 
-        {/* <Form.Item name="role" label="Role">
-          <Input placeholder="Type your role"></Input>
-        </Form.Item> */}
-
         <Form.Item
           name="device_type"
-          label="DeviceType"
+          label="Device Type"
           rules={[
             {
               required: true,
@@ -85,7 +86,7 @@ const Sign_In = () => {
 
         <Form.Item
           name="player_id"
-          label="Player_Id"
+          label="Player Id"
           rules={[
             {
               required: true,
@@ -100,7 +101,7 @@ const Sign_In = () => {
 
         <Form.Item wrapperCol={{ span: 24 }}>
           <Button block type="primary" htmlType="submit">
-            Sign_In
+            Sign In
           </Button>
         </Form.Item>
       </Form>
@@ -108,4 +109,4 @@ const Sign_In = () => {
   );
 };
 
-export default Sign_In;
+export default SignIn;

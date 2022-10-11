@@ -48,7 +48,6 @@ export const getVerifyAuthTokenFromLocalStorage = () => {
     "getVerifyAuthTokenFromLocalStorage funct",
     JSON.stringify(auth1)
   );
-  const ret = JSON.stringify(auth1);
-  console.log("result in get user funct", result);
+
   return auth1;
 };
