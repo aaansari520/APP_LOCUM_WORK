@@ -22,6 +22,7 @@ const initialState = {
   showNav: true,
   userData: getPatientsFromLocalStorage(),
   showPatient: false,
+  searchValue: "",
 };
 
 export const registerUser = createAsyncThunk(
@@ -58,24 +59,27 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk("user/getUser", async (_, thunkAPI) => {
-  try {
-    const resp = await customFetch({
-      url: "/api/doctor/patients.json",
-      method: "GET",
-      params: {
-        search: "Shahkhalid",
-      },
-      headers: {
-        auth_token: getVerifyAuthTokenFromLocalStorage(),
-      },
-    });
-    console.log("getUser me response", resp.data);
-    return resp.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.resp.message);
+export const getUser = createAsyncThunk(
+  "user/getUser",
+  async (search, thunkAPI) => {
+    try {
+      const resp = await customFetch({
+        url: "/api/doctor/patients.json",
+        method: "GET",
+        params: {
+          search: search,
+        },
+        headers: {
+          auth_token: getVerifyAuthTokenFromLocalStorage(),
+        },
+      });
+      console.log("getUser me response", resp.data);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.resp.message);
+    }
   }
-});
+);
 
 // catch (error) {
 //   return thunkAPI.rejectWithValue(error.resp.message);
@@ -153,6 +157,10 @@ const userSlice = createSlice({
       removeUserFromLocalStorage();
       toast.success(`Thank you ${logOutUser.firstName}`);
     },
+    searchBased: (state, actions) => {
+      console.log("searchedText in reducer", actions.payload);
+      state.searchValue = actions.payload;
+    },
   },
   extraReducers: {
     [registerUser.pending]: (state) => {
@@ -179,11 +187,11 @@ const userSlice = createSlice({
       }
     },
     [registerUser.rejected]: (state, actions) => {
-      state.isLoading = false;
+      // state.isLoading = false;
       toast.error(actions.payload);
     },
     [verifyUser.pending]: (state) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     },
     [verifyUser.fulfilled]: (state, actions) => {
       if (actions.payload.status === 200) {
@@ -197,11 +205,11 @@ const userSlice = createSlice({
       }
     },
     [verifyUser.rejected]: (state, { payload }) => {
-      state.isLoading = false;
+      // state.isLoading = false;
       toast.error(payload);
     },
     [loginUser.pending]: (state) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     },
     [loginUser.fulfilled]: (state, actions) => {
       if (actions.payload.status === 200) {
@@ -221,7 +229,7 @@ const userSlice = createSlice({
       toast.error(payload);
     },
     [logOutUser.pending]: (state) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     },
     [logOutUser.fulfilled]: (state, actions) => {
       // const logOutUser = getUserFromLocalStorage();
@@ -239,11 +247,12 @@ const userSlice = createSlice({
       toast.error(payload);
     },
     [getUser.pending]: (state) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     },
+
     [getUser.fulfilled]: (state, actions) => {
-      state.isLoading = true;
       if (actions.payload.status === 200) {
+        state.isLoading = true;
         // state.showNav = false;
         console.log("User Data", actions.payload.data);
         state.userData = actions.payload.data;
@@ -262,6 +271,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutUser } = userSlice.actions;
+export const { logoutUser, searchBased } = userSlice.actions;
 
 export default userSlice.reducer;

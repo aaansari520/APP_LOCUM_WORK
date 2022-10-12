@@ -26,6 +26,12 @@ const SignIn = () => {
   //   }
   // }, [user]);
 
+  // const navigating = () => {
+  //   if (user) {
+  //     navigate("/verify");
+  //   }
+  // };
+
   return (
     <div className="form-Design signinForm">
       <Form

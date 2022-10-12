@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, logOutUser } from "../../Redux/userSlice";
+import { logOutUser } from "../../Redux/userSlice";
 
 const NavBar = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -52,7 +52,7 @@ const NavBar = () => {
         <>
           <Link to="/table">
             <button
-              onClick={() => dispatch(getUser())}
+              // onClick={() => dispatch(getUser(searchValue))}
               style={{ color: "darkblue", fontWeight: "bold" }}
             >
               Get Patients
@@ -61,7 +61,7 @@ const NavBar = () => {
 
           <button
             onClick={() => dispatch(logOutUser())}
-            style={{ color: "red", fontWeight: "bold" }}
+            style={{ color: "", fontWeight: "bold" }}
           >
             {auth ? "Logout" : ""}
           </button>

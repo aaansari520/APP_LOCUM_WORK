@@ -5,9 +5,22 @@ const Home = () => {
   const { products } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
 
+  // window.addEventListener("popstate", (event) => {
+  //   console.log("jhfhd");
+  //   return false;
+  // });
+
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
   };
+
+  // useEffect(() => {
+  //   if (auth) {
+  //     setTimeout(() => {
+  //       navigate("/home");
+  //     }, 2000);
+  //   }
+  // }, [auth]);
 
   return (
     <div className="home-container">

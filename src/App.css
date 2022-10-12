@@ -104,6 +104,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
+  outline: none;
 }
 .nav-bag {
   display: flex;
@@ -432,7 +433,7 @@ body {
 }
 
 .ant-input-search-button {
-  /* height: 45px; */
+  outline: none;
 }
 .ant-input {
   /* height: 45px; */

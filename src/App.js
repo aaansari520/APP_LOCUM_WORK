@@ -9,16 +9,14 @@ import { useSelector } from "react-redux";
 import ProtectedRoute from "./ProtectedRoutes/Protected";
 import Home from "./components/cart/Home";
 import Cart from "./components/cart/Cart";
-import { getUserFromLocalStorage } from "./localStorage/LocalStorageData";
 import Verify from "./components/Verify";
 import SignIn from "./components/Sign_in";
 
 import PatientTable from "./components/table/Table";
-import { Modal } from "antd";
 
 function App() {
-  const { showNav, showPatient } = useSelector((store) => store.user);
-  getUserFromLocalStorage();
+  const { showNav } = useSelector((store) => store.user);
+
   return (
     <BrowserRouter>
       {showNav && <NavBar />}
@@ -26,15 +24,20 @@ function App() {
         <Route exact path="/" element={<SignUp />} />
         <Route exact path="/sign_in" element={<SignIn />} />
         <Route element={<ProtectedRoute />}>
-          {showPatient ? (
+          {/* {showPatient ? (
             <Route exact path="/table" element={<PatientTable />} />
           ) : (
-            "Please verify you self..."
-          )}
+            ""
+          )} */}
+          <Route exact path="/table" element={<PatientTable />} />
           <Route exact path="/verify" element={<Verify />} />
           <Route exact path="/home" element={<Home />} />
           <Route exact path="/cart" element={<Cart />} />
         </Route>
+        {/* <Route
+          path="/verify"
+          element={auth ? <Navigate to="/home" replace /> : <Verify />}
+        /> */}
       </Routes>
       <ToastContainer />
     </BrowserRouter>
