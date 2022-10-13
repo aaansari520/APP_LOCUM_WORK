@@ -10,11 +10,6 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const formRef = React.createRef();
 
-  // window.addEventListener("popstate", (event) => {
-  //   console.log("jhfhd");
-  //   return false;
-  // });
-
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -22,12 +17,6 @@ const SignUp = () => {
       }, 2000);
     }
   }, [user]);
-
-  // const navigating = () => {
-  //   if (user) {
-  //     navigate("/verify");
-  //   }
-  // };
 
   return (
     <div className="form-Design">

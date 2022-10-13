@@ -14,9 +14,7 @@ const NavBar = () => {
             <h2 style={{ marginTop: "15px" }}>User Authentication App</h2>
           </Link>
           <Link to="/sign_in">
-            <button style={{ color: "yellow", fontWeight: "bold" }}>
-              Sign In
-            </button>
+            <button className="common-nav-button green">Sign In</button>
           </Link>
         </>
       ) : (
@@ -51,17 +49,12 @@ const NavBar = () => {
       {auth ? (
         <>
           <Link to="/table">
-            <button
-              // onClick={() => dispatch(getUser(searchValue))}
-              style={{ color: "darkblue", fontWeight: "bold" }}
-            >
-              Get Patients
-            </button>
+            <button className="common-nav-button blue">Get Patients</button>
           </Link>
 
           <button
             onClick={() => dispatch(logOutUser())}
-            style={{ color: "", fontWeight: "bold" }}
+            className="common-nav-button red"
           >
             {auth ? "Logout" : ""}
           </button>

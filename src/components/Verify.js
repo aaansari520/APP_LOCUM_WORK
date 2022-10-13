@@ -9,11 +9,6 @@ const Verify = () => {
   const dispatch = useDispatch();
   var navigate = useNavigate();
 
-  // window.addEventListener("popstate", (event) => {
-  //   console.log("jhfhd");
-  //   return false;
-  // });
-
   useEffect(() => {
     if (auth) {
       setTimeout(() => {
@@ -22,14 +17,7 @@ const Verify = () => {
     }
   }, [auth]);
 
-  // const navigating = () => {
-  //   if (auth) {
-  //     navigate("/home");
-  //   }
-  // };
-
   return (
-    // <div className="home-container">
     <div className="form-Design signinForm">
       <Form
         className="Form"
@@ -83,7 +71,6 @@ const Verify = () => {
         </Form.Item>
       </Form>
     </div>
-    // </div>
   );
 };
 

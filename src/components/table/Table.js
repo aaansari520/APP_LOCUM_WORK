@@ -11,20 +11,6 @@ const PatientTable = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const dispatch = useDispatch();
-  var navigate = useNavigate();
-
-  // window.addEventListener("popstate", (event) => {
-  //   console.log("jhfhd");
-  //   return false;
-  // });
-
-  useEffect(() => {
-    if (auth) {
-      setTimeout(() => {
-        navigate("/table");
-      }, 2000);
-    }
-  }, [auth]);
 
   const firstUpdate = useRef(true);
 
@@ -36,7 +22,7 @@ const PatientTable = () => {
         firstUpdate.current = false;
       } else {
         if (searchedText) {
-          dispatch(getUser(searchedText, page));
+          dispatch(getUser(searchedText));
         }
       }
       if (!searchedText) {

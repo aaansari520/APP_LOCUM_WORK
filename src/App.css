@@ -443,3 +443,42 @@ body {
   font-size: large;
   color: brown;
 }
+
+.common-nav-button {
+  background: white !important;
+  padding: 1px 10px;
+  height: 35px;
+  border-radius: 5px;
+  margin: 0 5px;
+  position: relative;
+  box-shadow: 3px 3px 0px #202020;
+}
+
+.common-nav-button.red {
+  color: red;
+}
+.common-nav-button.blue {
+  color: blue;
+}
+
+.common-nav-button.green {
+  color: green;
+}
+.common-nav-button:active {
+  box-shadow: none;
+}
+
+/* .common-nav-button:hover {
+  background: #202020 !important;
+  color: white;
+}
+.common-nav-button::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  height: calc(100% - 6px);
+  width: calc(100% - 6px);
+  border-radius: 5px;
+  border: 1px solid #fff;
+} */

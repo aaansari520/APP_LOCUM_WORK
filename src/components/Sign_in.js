@@ -18,20 +18,6 @@ const SignIn = () => {
     }
   }, [user]);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setTimeout(() => {
-  //       navigate("/home");
-  //     }, 2000);
-  //   }
-  // }, [user]);
-
-  // const navigating = () => {
-  //   if (user) {
-  //     navigate("/verify");
-  //   }
-  // };
-
   return (
     <div className="form-Design signinForm">
       <Form

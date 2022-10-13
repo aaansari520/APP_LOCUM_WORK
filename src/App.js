@@ -24,16 +24,14 @@ function App() {
         <Route
           exact
           path="/"
-          element={user ? <Navigate to="/home" /> : <SignUp />}
+          element={auth ? <Navigate to="/home" /> : <SignUp />}
         />
-        <Route exact path="/sign_in" element={<SignIn />} />
+        <Route
+          exact
+          path="/sign_in"
+          element={auth ? <Navigate to="/home" /> : <SignIn />}
+        />
         <Route element={<ProtectedRoute />}>
-          {/* {showPatient ? (
-            <Route exact path="/table" element={<PatientTable />} />
-          ) : (
-            ""
-          )} */}
-          <Route exact path="/table" element={<PatientTable />} />
           <Route
             exact
             path="/verify"
@@ -41,11 +39,8 @@ function App() {
           />
           <Route exact path="/home" element={<Home />} />
           <Route exact path="/cart" element={<Cart />} />
+          <Route exact path="/table" element={<PatientTable />} />
         </Route>
-        {/* <Route
-          path="/verify"
-          element={auth ? <Navigate to="/home" replace /> : <Verify />}
-        /> */}
       </Routes>
       <ToastContainer />
     </BrowserRouter>
