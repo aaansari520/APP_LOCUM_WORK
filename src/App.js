@@ -15,7 +15,7 @@ import SignIn from "./components/Sign_in";
 import PatientTable from "./components/table/Table";
 
 function App() {
-  const { showNav, user, auth } = useSelector((store) => store.user);
+  const { showNav, auth } = useSelector((store) => store.user);
 
   return (
     <BrowserRouter>

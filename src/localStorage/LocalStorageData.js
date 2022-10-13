@@ -70,3 +70,20 @@ export const getPatientsFromLocalStorage = () => {
 export const removePatientsFromLocalStorage = () => {
   localStorage.removeItem("patient");
 };
+
+// >>>>>>>>>>>>>>>>>>>>...Email...<<<<<<<<<<<<<<<
+
+export const addEmailToLocalStorage = (email) => {
+  localStorage.setItem("email", JSON.stringify(email));
+};
+
+export const getEmailFromLocalStorage = () => {
+  const result = localStorage.getItem("email");
+  const Email = result ? JSON.parse(result) : null;
+
+  return Email;
+};
+
+export const removeEmailFromLocalStorage = () => {
+  localStorage.removeItem("email");
+};

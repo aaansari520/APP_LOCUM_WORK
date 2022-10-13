@@ -1,11 +1,11 @@
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, Spin } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../Redux/userSlice";
 
 const SignUp = () => {
-  const { user } = useSelector((store) => store.user);
+  const { user, isLoading } = useSelector((store) => store.user);
   var navigate = useNavigate();
   const dispatch = useDispatch();
   const formRef = React.createRef();
@@ -14,12 +14,20 @@ const SignUp = () => {
     if (user) {
       setTimeout(() => {
         navigate("/verify");
-      }, 2000);
+      });
     }
   }, [user]);
 
   return (
     <div className="form-Design">
+      {isLoading ? (
+        <div className="login-spinner">
+          <Spin size="middle"></Spin>
+        </div>
+      ) : (
+        ""
+      )}
+
       <Form
         className="Form"
         // autoComplete="off"
@@ -208,7 +216,7 @@ const SignUp = () => {
         </div>
 
         <Form.Item className="form-btn">
-          <Button block type="primary" htmlType="submit">
+          <Button block type="primary" htmlType="submit" className="shake-btn">
             Sign Up
           </Button>
         </Form.Item>

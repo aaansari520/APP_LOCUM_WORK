@@ -1,11 +1,11 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Spin } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { verifyUser } from "../Redux/userSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { notVerified, verifyUser } from "../Redux/userSlice";
 
 const Verify = () => {
-  const { user, auth } = useSelector((store) => store.user);
+  const { user, auth, isLoading, email } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   var navigate = useNavigate();
 
@@ -13,12 +13,45 @@ const Verify = () => {
     if (auth) {
       setTimeout(() => {
         navigate("/home");
-      }, 2000);
+      });
     }
   }, [auth]);
 
+  // useEffect(() => {
+  //   if (!user) {
+  //     setTimeout(() => {
+  //       navigate("/sign_in");
+  //     });
+  //   }
+  // }, []);
+
   return (
     <div className="form-Design signinForm">
+      <div className="nav-bar">
+        <Link to="/verify">
+          <h2 style={{ marginTop: "15px" }} className="shake-btn">
+            Verify to your self...
+          </h2>
+        </Link>
+
+        <Link to="/sign_in">
+          <button
+            className="common-nav-button green shake-btn"
+            onClick={() => dispatch(notVerified())}
+          >
+            Sign In
+          </button>
+        </Link>
+      </div>
+
+      {isLoading ? (
+        <div className="login-spinner">
+          <Spin size="middle"></Spin>
+        </div>
+      ) : (
+        ""
+      )}
+
       <Form
         className="Form"
         labelCol={{ span: 10 }}
@@ -32,13 +65,26 @@ const Verify = () => {
           dispatch(verifyUser(values));
         }}
       >
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "15px",
+          }}
+        >
+          <p style={{ margin: "0" }}>
+            A verification code has sent to your email
+          </p>
+          <b style={{ color: "green" }}>{email} </b>
+          <p style={{ margin: "0" }}>Check your spam/junk as well.</p>
+        </div>
+
         <Form.Item
           label="Enter OTP"
           name="otp"
           rules={[
             {
               required: true,
-              message: "This field is required!",
+              message: "Please enter your otp!",
             },
           ]}
         >
@@ -65,6 +111,7 @@ const Verify = () => {
             type="primary"
             htmlType="submit"
             style={{ padding: "5px 50px" }}
+            className="shake-btn"
           >
             Submit
           </Button>

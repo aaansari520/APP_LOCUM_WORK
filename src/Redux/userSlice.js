@@ -3,13 +3,16 @@ import { toast } from "react-toastify";
 import customFetch from "../axios/axios";
 import {
   addAuthTokenToLocalStorage,
+  addEmailToLocalStorage,
   addPatientToLocalStorage,
   addUserToLocalStorage,
   addVerifyAuthTokenToLocalStorage,
+  getEmailFromLocalStorage,
   getPatientsFromLocalStorage,
   getUserFromLocalStorage,
   getVerifyAuthTokenFromLocalStorage,
   removeAuthTokenFromLocalStorage,
+  removeEmailFromLocalStorage,
   removePatientsFromLocalStorage,
   removeUserFromLocalStorage,
   removeVerifyAuthTokenFromLocalStorage,
@@ -23,6 +26,7 @@ const initialState = {
   userData: getPatientsFromLocalStorage(),
   showPatient: false,
   searchValue: "",
+  email: getEmailFromLocalStorage(),
 };
 
 export const registerUser = createAsyncThunk(
@@ -89,6 +93,8 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
     console.log("login", user);
+    addEmailToLocalStorage(user.email);
+
     const data = {
       device_detail: {
         device_type: user.device_type,
@@ -152,14 +158,22 @@ const userSlice = createSlice({
   reducers: {
     logoutUser: (state) => {
       const logOutUser = getUserFromLocalStorage();
-
       state.user = null;
       removeUserFromLocalStorage();
       toast.success(`Thank you ${logOutUser.firstName}`);
     },
     searchBased: (state, actions) => {
       console.log("searchedText in reducer", actions.payload);
-      state.searchValue = actions.payload;
+      state.userData = null;
+      removePatientsFromLocalStorage();
+      // toast.error(`Oops you cleared the field! No data to show!`);
+    },
+    notVerified: (state) => {
+      state.user = null;
+      state.showNav = true;
+      state.email = null;
+      removeEmailFromLocalStorage();
+      removeUserFromLocalStorage();
     },
   },
   extraReducers: {
@@ -178,20 +192,21 @@ const userSlice = createSlice({
         const authToken = actions?.payload?.data?.user?.auth_token;
         addAuthTokenToLocalStorage(authToken);
         const user1 = actions?.meta?.arg;
-        state.isLoading = false;
         state.user = user1;
         addUserToLocalStorage(user1);
         toast.success(`Welcome ${user1.firstName}  ${user1.lastName}`);
+        state.isLoading = false;
       } else if (actions.payload.status !== 200) {
+        state.isLoading = false;
         toast.error(`${actions.payload.message}`);
       }
     },
     [registerUser.rejected]: (state, actions) => {
-      // state.isLoading = false;
+      state.isLoading = false;
       toast.error(actions.payload);
     },
     [verifyUser.pending]: (state) => {
-      // state.isLoading = true;
+      state.isLoading = true;
     },
     [verifyUser.fulfilled]: (state, actions) => {
       if (actions.payload.status === 200) {
@@ -200,27 +215,31 @@ const userSlice = createSlice({
         addVerifyAuthTokenToLocalStorage(verifyAuthToken);
         state.auth = verifyAuthToken;
         toast.success(`${actions.payload.message}`);
+        state.isLoading = false;
       } else {
+        state.isLoading = false;
         toast.error(`${actions.payload.message}`);
       }
     },
     [verifyUser.rejected]: (state, { payload }) => {
-      // state.isLoading = false;
+      state.isLoading = false;
       toast.error(payload);
     },
     [loginUser.pending]: (state) => {
-      // state.isLoading = true;
+      state.isLoading = true;
     },
     [loginUser.fulfilled]: (state, actions) => {
       if (actions.payload.status === 200) {
-        state.showNav = false;
+        state.showNav = true;
         const user = actions.payload.data;
         console.log("user kya mila sign in me", actions);
-        state.isLoading = false;
         state.user = user;
+        state.email = getEmailFromLocalStorage();
         addUserToLocalStorage(user);
         toast.success(`${actions.payload.message}`);
+        state.isLoading = false;
       } else if (actions.payload.status !== 200) {
+        state.isLoading = false;
         toast.error(`${actions.payload.message}`);
       }
     },
@@ -229,39 +248,41 @@ const userSlice = createSlice({
       toast.error(payload);
     },
     [logOutUser.pending]: (state) => {
-      // state.isLoading = true;
+      state.isLoading = true;
     },
     [logOutUser.fulfilled]: (state, actions) => {
-      // const logOutUser = getUserFromLocalStorage();
-
       state.user = null;
       state.auth = null;
+      state.userData = null;
+      state.email = null;
+      removeEmailFromLocalStorage();
       removeAuthTokenFromLocalStorage();
       removeUserFromLocalStorage();
       removeVerifyAuthTokenFromLocalStorage();
       removePatientsFromLocalStorage();
       toast.success(`${actions.payload.message}`);
+      state.isLoading = false;
     },
     [logOutUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
       toast.error(payload);
     },
     [getUser.pending]: (state) => {
-      // state.isLoading = true;
+      state.isLoading = true;
     },
 
     [getUser.fulfilled]: (state, actions) => {
       if (actions.payload.status === 200) {
-        state.isLoading = true;
         // state.showNav = false;
         console.log("User Data", actions.payload.data);
         state.userData = actions.payload.data;
         addPatientToLocalStorage(state.userData);
         state.showPatient = true;
-        state.isLoading = false;
         toast.success(`${actions.payload.message}`);
+        state.isLoading = false;
       } else {
         toast.error(`${actions.payload.message}`);
+        state.isLoading = false;
       }
     },
     [getUser.rejected]: (state, { payload }) => {
@@ -271,6 +292,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutUser, searchBased } = userSlice.actions;
+export const { logoutUser, searchBased, notVerified } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -5,11 +5,6 @@ const Home = () => {
   const { products } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
 
-  // window.addEventListener("popstate", (event) => {
-  //   console.log("jhfhd");
-  //   return false;
-  // });
-
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
   };

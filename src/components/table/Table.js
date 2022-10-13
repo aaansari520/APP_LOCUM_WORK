@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Input, Table, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../../Redux/userSlice";
-import { removePatientsFromLocalStorage } from "../../localStorage/LocalStorageData";
-import { useNavigate } from "react-router-dom";
+import { getUser, searchBased } from "../../Redux/userSlice";
 
 const PatientTable = () => {
-  const { userData, isLoading, auth } = useSelector((state) => state.user);
+  const { userData, isLoading } = useSelector((state) => state.user);
   const [searchedText, setSearchedText] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -17,7 +15,7 @@ const PatientTable = () => {
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       console.log("stop");
-      // dispatch(searchBased(searchedText));
+
       if (firstUpdate.current) {
         firstUpdate.current = false;
       } else {
@@ -26,7 +24,7 @@ const PatientTable = () => {
         }
       }
       if (!searchedText) {
-        removePatientsFromLocalStorage();
+        dispatch(searchBased());
       }
     }, 2000);
 
@@ -46,8 +44,6 @@ const PatientTable = () => {
       dataIndex: "full_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        // console.log("RECORDSSSSS", record.patient_profile.gender);
-        console.log("VALUESSSSSS", value);
         return (
           String(record.full_name)
             .toLowerCase()
