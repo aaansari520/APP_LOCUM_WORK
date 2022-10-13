@@ -1,6 +1,6 @@
 import "antd/dist/antd.min.css";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import SignUp from "./components/LoginForm";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,13 +15,17 @@ import SignIn from "./components/Sign_in";
 import PatientTable from "./components/table/Table";
 
 function App() {
-  const { showNav } = useSelector((store) => store.user);
+  const { showNav, user, auth } = useSelector((store) => store.user);
 
   return (
     <BrowserRouter>
       {showNav && <NavBar />}
       <Routes>
-        <Route exact path="/" element={<SignUp />} />
+        <Route
+          exact
+          path="/"
+          element={user ? <Navigate to="/home" /> : <SignUp />}
+        />
         <Route exact path="/sign_in" element={<SignIn />} />
         <Route element={<ProtectedRoute />}>
           {/* {showPatient ? (
@@ -30,7 +34,11 @@ function App() {
             ""
           )} */}
           <Route exact path="/table" element={<PatientTable />} />
-          <Route exact path="/verify" element={<Verify />} />
+          <Route
+            exact
+            path="/verify"
+            element={auth ? <Navigate to="/home" /> : <Verify />}
+          />
           <Route exact path="/home" element={<Home />} />
           <Route exact path="/cart" element={<Cart />} />
         </Route>
