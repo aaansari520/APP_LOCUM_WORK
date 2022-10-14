@@ -27,6 +27,8 @@ const initialState = {
   showPatient: false,
   searchValue: "",
   email: getEmailFromLocalStorage(),
+  totalPages: null,
+  total: null,
 };
 
 export const registerUser = createAsyncThunk(
@@ -65,29 +67,37 @@ export const registerUser = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   "user/getUser",
-  async (search, thunkAPI) => {
+  async ({ page1, searchedText }, thunkAPI) => {
+    console.log("page kya milraha hai yaha", page1);
+    console.log("search", searchedText);
     try {
       const resp = await customFetch({
         url: "/api/doctor/patients.json",
         method: "GET",
         params: {
-          search: search,
+          search: searchedText,
+          page: page1,
         },
         headers: {
           auth_token: getVerifyAuthTokenFromLocalStorage(),
         },
       });
-      console.log("getUser me response", resp.data);
-      return resp.data;
+      let Pagination = JSON.parse(resp.headers["x-pagination"]);
+      console.log("getUser me response", resp.headers["x-pagination"]);
+      console.log("Pagination me kya milraha hai", Pagination.total_pages);
+      // state.totalPages = Pagination.total_pages;
+      let Obj = {
+        pageData: Pagination,
+        respDataData: resp.data.data,
+        respData: resp.data,
+      };
+      console.log("OBJECT", Obj);
+      return Obj;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.resp.message);
     }
   }
 );
-
-// catch (error) {
-//   return thunkAPI.rejectWithValue(error.resp.message);
-// }
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
@@ -165,6 +175,7 @@ const userSlice = createSlice({
     searchBased: (state, actions) => {
       console.log("searchedText in reducer", actions.payload);
       state.userData = null;
+      state.totalPages = null;
       removePatientsFromLocalStorage();
       // toast.error(`Oops you cleared the field! No data to show!`);
     },
@@ -271,17 +282,26 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
 
-    [getUser.fulfilled]: (state, actions) => {
-      if (actions.payload.status === 200) {
+    [getUser.fulfilled]: (state, { payload }) => {
+      console.log("Payload me kya miola", payload);
+      const { pageData, respDataData, respData } = payload;
+      console.log("Payload Destructure", respData);
+      if (respData.status === 200) {
         // state.showNav = false;
-        console.log("User Data", actions.payload.data);
-        state.userData = actions.payload.data;
+        // console.log(actions);
+        console.log("User Data", payload);
+        console.log("ACtions in get user", respData);
+        // state.userData = actions.payload.data;
+
+        state.userData = respDataData;
+        state.totalPages = pageData.total_pages;
+        state.total = pageData.total;
         addPatientToLocalStorage(state.userData);
         state.showPatient = true;
-        toast.success(`${actions.payload.message}`);
+        // toast.success(`${actions.payload.message}`);
         state.isLoading = false;
       } else {
-        toast.error(`${actions.payload.message}`);
+        toast.error(`${respData.message}`);
         state.isLoading = false;
       }
     },

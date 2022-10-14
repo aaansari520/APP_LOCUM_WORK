@@ -4,23 +4,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser, searchBased } from "../../Redux/userSlice";
 
 const PatientTable = () => {
-  const { userData, isLoading } = useSelector((state) => state.user);
+  const { userData, isLoading, totalPages, total } = useSelector(
+    (state) => state.user
+  );
   const [searchedText, setSearchedText] = useState(null);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [page1, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(1);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (totalPages !== null) {
+      setPageSize(totalPages);
+    }
+  }, [totalPages]);
+
+  console.log("Total Pagesss", totalPages);
+  console.log(" Pagesss", page1);
+  const gettingPage = (page) => {
+    setPage(page);
+    console.log("Value change horahi hai kya page ki", page);
+  };
   const firstUpdate = useRef(true);
 
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       console.log("stop");
-
       if (firstUpdate.current) {
         firstUpdate.current = false;
       } else {
         if (searchedText) {
-          dispatch(getUser(searchedText));
+          dispatch(getUser({ searchedText, page1 }));
         }
       }
       if (!searchedText) {
@@ -29,7 +42,7 @@ const PatientTable = () => {
     }, 2000);
 
     return () => clearTimeout(delaySearch);
-  }, [searchedText]);
+  }, [searchedText, page1]);
 
   const columns = [
     {
@@ -103,20 +116,24 @@ const PatientTable = () => {
           setSearchedText(change);
         }}
       ></Input.Search>
-      <Table
-        loading={isLoading}
-        dataSource={userData}
-        columns={columns}
-        pagination={{
-          current: page,
-          pageSize: pageSize,
-          onChange: (page, pageSize) => {
-            setPage(page);
-            setPageSize(pageSize);
-          },
-        }}
-        rowKey="id"
-      ></Table>
+
+      {searchedText ? (
+        <Table
+          loading={isLoading}
+          dataSource={userData}
+          columns={columns}
+          pagination={{
+            total: total,
+            onChange: (pag) => {
+              gettingPage(pag);
+              console.log("pag", pag);
+            },
+          }}
+          rowKey="id"
+        ></Table>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
