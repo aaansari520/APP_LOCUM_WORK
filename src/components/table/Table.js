@@ -9,17 +9,12 @@ const PatientTable = () => {
   );
   const [searchedText, setSearchedText] = useState(null);
   const [page1, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(1);
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (totalPages !== null) {
-      setPageSize(totalPages);
-    }
-  }, [totalPages]);
+  // console.log("Total Pagesss", totalPages);
+  // console.log(" Pagesss", page1);
 
-  console.log("Total Pagesss", totalPages);
-  console.log(" Pagesss", page1);
   const gettingPage = (page) => {
     setPage(page);
     console.log("Value change horahi hai kya page ki", page);
@@ -42,7 +37,12 @@ const PatientTable = () => {
     }, 2000);
 
     return () => clearTimeout(delaySearch);
-  }, [searchedText, page1]);
+  }, [searchedText]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    dispatch(getUser({ searchedText, page1 }));
+  }, [page1]);
 
   const columns = [
     {
@@ -107,10 +107,6 @@ const PatientTable = () => {
       <Input.Search
         className="Table-input"
         placeholder="make global search here..."
-        // onSearch={(value) => {
-        //   setSearchedText(value);
-        // }}
-        // value={searchedText}
         onChange={(e) => {
           const change = e.target.value;
           setSearchedText(change);
