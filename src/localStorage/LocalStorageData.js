@@ -1,5 +1,7 @@
 // >>>>>>>>>>>>>>>>>>>...The USER...<<<<<<<<<<<<<<<<
 
+import { toast } from "react-toastify";
+
 export const addUserToLocalStorage = (user) => {
   localStorage.setItem("user", JSON.stringify(user));
   //   localStorage.setItem("user", user);
@@ -69,6 +71,7 @@ export const getPatientsFromLocalStorage = () => {
 
 export const removePatientsFromLocalStorage = () => {
   localStorage.removeItem("patient");
+  // toast.info(`Please serach something in the input field...`);
 };
 
 // >>>>>>>>>>>>>>>>>>>>...Email...<<<<<<<<<<<<<<<
@@ -86,4 +89,21 @@ export const getEmailFromLocalStorage = () => {
 
 export const removeEmailFromLocalStorage = () => {
   localStorage.removeItem("email");
+};
+
+// >>>>>>>>>>>>>>>>>>>>...SURGERY...<<<<<<<<<<<<<<<
+
+export const addSurgeryToLocalStorage = (surgery) => {
+  localStorage.setItem("surgery", JSON.stringify(surgery));
+};
+
+export const getSurgeryFromLocalStorage = () => {
+  const result = localStorage.getItem("surgery");
+  const Surgery = result ? JSON.parse(result) : null;
+
+  return Surgery;
+};
+
+export const removeSurgeryFromLocalStorage = () => {
+  localStorage.removeItem("surgery");
 };

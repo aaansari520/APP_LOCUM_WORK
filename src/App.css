@@ -530,3 +530,12 @@ body {
     transform: translate3d(8px, 0, 0);
   }
 }
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ant-modal {
+  max-width: 1000px;
+  width: calc(100% - 20px) !important;
+}

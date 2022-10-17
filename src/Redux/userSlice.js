@@ -29,6 +29,7 @@ const initialState = {
   email: getEmailFromLocalStorage(),
   totalPages: null,
   total: null,
+  show: false,
 };
 
 export const registerUser = createAsyncThunk(
@@ -82,19 +83,22 @@ export const getUser = createAsyncThunk(
           auth_token: getVerifyAuthTokenFromLocalStorage(),
         },
       });
+
       let Pagination = JSON.parse(resp.headers["x-pagination"]);
       console.log("getUser me response", resp.headers["x-pagination"]);
       console.log("Pagination me kya milraha hai", Pagination.total_pages);
-      // state.totalPages = Pagination.total_pages;
+
       let Obj = {
         pageData: Pagination,
         respDataData: resp.data.data,
         respData: resp.data,
       };
+      console.log("response.....", Obj.respData);
       console.log("OBJECT", Obj);
       return Obj;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.resp.message);
+      console.log("dggdfdfsdfsdfsd", error);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -176,8 +180,9 @@ const userSlice = createSlice({
       console.log("searchedText in reducer", actions.payload);
       state.userData = null;
       state.totalPages = null;
+      state.total = null;
+      state.show = false;
       removePatientsFromLocalStorage();
-      // toast.error(`Oops you cleared the field! No data to show!`);
     },
     notVerified: (state) => {
       state.user = null;
@@ -286,13 +291,13 @@ const userSlice = createSlice({
       console.log("Payload me kya miola", payload);
       const { pageData, respDataData, respData } = payload;
       console.log("Payload Destructure", respData);
+
       if (respData.status === 200) {
-        // state.showNav = false;
+        state.show = true;
         // console.log(actions);
         console.log("User Data", payload);
         console.log("ACtions in get user", respData);
         // state.userData = actions.payload.data;
-
         state.userData = respDataData;
         state.totalPages = pageData.total_pages;
         state.total = pageData.total;
@@ -302,12 +307,13 @@ const userSlice = createSlice({
         state.isLoading = false;
       } else {
         toast.error(`${respData.message}`);
+        // toast.error(`U are not authorised`);
         state.isLoading = false;
       }
     },
     [getUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
-      toast.error(payload);
+      toast.error(payload.message);
     },
   },
 });

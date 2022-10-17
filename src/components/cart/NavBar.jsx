@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/userSlice";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -53,7 +54,7 @@ const NavBar = () => {
       {auth ? (
         <>
           <Link to="/table">
-            <button className="common-nav-button blue">Get Patients</button>
+            <button className="common-nav-button blue">Patients</button>
           </Link>
 
           <button

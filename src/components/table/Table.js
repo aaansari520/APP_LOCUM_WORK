@@ -1,25 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Input, Table, Tag } from "antd";
+import { Button, Input, Table, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, searchBased } from "../../Redux/userSlice";
+import { Link } from "react-router-dom";
+import { openModal } from "../../Redux/patientSlice";
 
 const PatientTable = () => {
-  const { userData, isLoading, totalPages, total } = useSelector(
+  const { userData, isLoading, total, show } = useSelector(
     (state) => state.user
   );
+  const { open } = useSelector((store) => store.patient);
   const [searchedText, setSearchedText] = useState(null);
   const [page1, setPage] = useState(1);
-  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
-
-  // console.log("Total Pagesss", totalPages);
-  // console.log(" Pagesss", page1);
+  const firstUpdate = useRef(true);
 
   const gettingPage = (page) => {
     setPage(page);
-    console.log("Value change horahi hai kya page ki", page);
+    // console.log("Value change horahi hai kya page ki", page);
   };
-  const firstUpdate = useRef(true);
 
   useEffect(() => {
     const delaySearch = setTimeout(() => {
@@ -41,7 +40,10 @@ const PatientTable = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(getUser({ searchedText, page1 }));
+    if (searchedText) {
+      dispatch(getUser({ searchedText, page1 }));
+    }
+    // dispatch(getUser({ searchedText, page1 }));
   }, [page1]);
 
   const columns = [
@@ -104,16 +106,33 @@ const PatientTable = () => {
 
   return (
     <div className="Table-Design">
-      <Input.Search
-        className="Table-input"
-        placeholder="make global search here..."
-        onChange={(e) => {
-          const change = e.target.value;
-          setSearchedText(change);
-        }}
-      ></Input.Search>
+      <div className="top">
+        <Input.Search
+          className="Table-input"
+          placeholder="Search patients..."
+          onChange={(e) => {
+            const change = e.target.value;
+            setSearchedText(change);
+          }}
+        ></Input.Search>
 
-      {searchedText ? (
+        <Link to="/modal">
+          <Button
+            style={{
+              backgroundColor: "green",
+              color: "pink",
+              marginLeft: "10px",
+            }}
+            onClick={() => {
+              dispatch(openModal());
+            }}
+          >
+            Add Patient
+          </Button>
+        </Link>
+      </div>
+
+      {show ? (
         <Table
           loading={isLoading}
           dataSource={userData}
@@ -122,7 +141,6 @@ const PatientTable = () => {
             total: total,
             onChange: (pag) => {
               gettingPage(pag);
-              console.log("pag", pag);
             },
           }}
           rowKey="id"

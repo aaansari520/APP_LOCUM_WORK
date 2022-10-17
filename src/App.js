@@ -13,6 +13,7 @@ import Verify from "./components/Verify";
 import SignIn from "./components/Sign_in";
 
 import PatientTable from "./components/table/Table";
+import PatientModal from "./components/modal/PatientModal";
 
 function App() {
   const { showNav, auth } = useSelector((store) => store.user);
@@ -26,6 +27,7 @@ function App() {
           path="/"
           element={auth ? <Navigate to="/home" /> : <SignUp />}
         />
+
         <Route
           exact
           path="/sign_in"
@@ -40,6 +42,7 @@ function App() {
           <Route exact path="/home" element={<Home />} />
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/table" element={<PatientTable />} />
+          <Route path="/modal" element={<PatientModal />} />
         </Route>
       </Routes>
       <ToastContainer />
