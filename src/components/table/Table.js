@@ -43,7 +43,6 @@ const PatientTable = () => {
     if (searchedText) {
       dispatch(getUser({ searchedText, page1 }));
     }
-    // dispatch(getUser({ searchedText, page1 }));
   }, [page1]);
 
   const columns = [

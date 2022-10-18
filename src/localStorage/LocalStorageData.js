@@ -107,3 +107,20 @@ export const getSurgeryFromLocalStorage = () => {
 export const removeSurgeryFromLocalStorage = () => {
   localStorage.removeItem("surgery");
 };
+
+// >>>>>>>>>>>>>>>>>>>>...SURGERY ID...<<<<<<<<<<<<<<<
+
+export const addSurgeryIDToLocalStorage = (surgeryID) => {
+  localStorage.setItem("surgeryID", JSON.stringify(surgeryID));
+};
+
+export const getSurgeryIDFromLocalStorage = () => {
+  const result = localStorage.getItem("surgeryID");
+  const surgeryID = result ? JSON.parse(result) : null;
+
+  return surgeryID;
+};
+
+export const removeSurgeryIDFromLocalStorage = () => {
+  localStorage.removeItem("surgeryID");
+};

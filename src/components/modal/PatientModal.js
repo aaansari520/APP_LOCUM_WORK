@@ -1,36 +1,83 @@
-import { Button, DatePicker, Form, Input, Modal, Select, Upload } from "antd";
-import React, { useEffect, useState } from "react";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Upload,
+  Spin,
+} from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   addPatients,
   cancle,
   getSurgery,
+  removeSurgery,
   reset,
+  updateId,
 } from "../../Redux/patientSlice";
 import { UploadOutlined } from "@ant-design/icons";
 
+const { Option } = Select;
+
 const PatientModal = () => {
-  const { open, patient } = useSelector((store) => store.patient);
-  //   const [searchedPatient, setSearchedPatient] = useState(null);
+  const { open, patient, surgery } = useSelector((store) => store.patient);
+  const [searchedSurgery, setSearchedSurgery] = useState(null);
+
   var navigate = useNavigate();
   const dispatch = useDispatch();
   const formRef = React.createRef();
+  const firstUpdate = useRef(true);
 
   const handleCancel = () => {
     dispatch(cancle());
     navigate("/table");
+  };
+  // console.log("gettingID", getId);
+
+  const gettingID = (id) => {
+    dispatch(updateId(id));
+    console.log("gettingID", id);
+  };
+
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
   };
 
   //   useEffect(() => {
   //     navigate("/table");
   //   }, [patient]);
 
-  //   useEffect(() => {
-  //     if (searchedPatient) {
-  //       dispatch(getSurgery(searchedPatient));
-  //     }
-  //   }, [searchedPatient]);
+  // useEffect(() => {
+  //   if (!getId) {
+  //     setSurID(1);
+  //   } else if (getId) {
+  //     setSurID(getId);
+  //   }
+  // }, [getId]);
+
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
+      console.log("stop");
+      if (firstUpdate.current) {
+        firstUpdate.current = false;
+      } else {
+        if (searchedSurgery) {
+          dispatch(getSurgery(searchedSurgery));
+        }
+      }
+      if (!searchedSurgery) {
+        dispatch(removeSurgery());
+      }
+    }, 2000);
+
+    return () => clearTimeout(delaySearch);
+  }, [searchedSurgery]);
 
   return (
     <Modal
@@ -46,7 +93,9 @@ const PatientModal = () => {
           // autoComplete="off"
           labelCol={{ span: 10 }}
           wrapperCol={{ span: 12 }}
-          initialValues={{ securityAns: "test", surgery_id: "13052" }}
+          // initialValues={{
+          //   surgery_id: surID,
+          // }}
           onFinish={(values) => {
             dispatch(addPatients(values));
             console.log("Patient Data", values);
@@ -148,7 +197,8 @@ const PatientModal = () => {
             </Form.Item>
             <Form.Item name="upload" label="Image">
               <Upload
-                action={"https://dev-api.alldaydr.com/api/doctor/patients.json"}
+                // action={"https://dev-api.alldaydr.com/api/doctor/patients.json"}
+                customRequest={dummyRequest}
               >
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
@@ -180,18 +230,20 @@ const PatientModal = () => {
               ]}
             >
               <Select placeholder="securityQues">
-                {["Mother's Name"].map((ques, index) => {
-                  return (
-                    <Select.Option value={ques} allowClear key={index}>
-                      {ques}
-                    </Select.Option>
-                  );
-                })}
+                {["Mother's Name", "School Name", "College Name"].map(
+                  (ques, index) => {
+                    return (
+                      <Select.Option value={ques} allowClear key={index}>
+                        {ques}
+                      </Select.Option>
+                    );
+                  }
+                )}
               </Select>
             </Form.Item>
 
-            {/* <Form.Item
-              name="surgery"
+            <Form.Item
+              name="surgery_id"
               label="Select Surgery"
               rules={[
                 {
@@ -200,21 +252,42 @@ const PatientModal = () => {
                 },
               ]}
             >
-              <Input.Search
-                placeholder="Search patients..."
-                onChange={(e) => {
-                  const change = e.target.value;
-                  setSearchedPatient(change);
+              <Select
+                showSearch
+                filterOption={false}
+                onSearch={(e) => {
+                  setSearchedSurgery(e);
+
+                  console.log("setSearchedSurgery", e);
                 }}
-              ></Input.Search>
-            </Form.Item> */}
+                onSelect={(sur) => {
+                  // setSurID(sur.id);
+                  console.log("Chalas Kya");
+                }}
+                // setSurID(e.target.id);
+                onChange={function (e) {
+                  console.log(this);
+                  console.log("shdshds", e);
+                  // setSurgeryValue();
+                  gettingID(e);
+                }}
+              >
+                {surgery?.map((sur) => {
+                  return (
+                    <Select.Option value={sur.id} allowClear key={sur.id}>
+                      {sur.practice_name}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
 
             <Form.Item name="securityAns" label="Security Answer" hasFeedback>
-              <Input readOnly></Input>
+              <Input></Input>
             </Form.Item>
-            <Form.Item name="surgery_id" label="surgery_id" hasFeedback>
-              <Input readOnly></Input>
-            </Form.Item>
+            {/* <Form.Item name="surgery_id" label="Surgery_id" hasFeedback>
+              {getId ? <Input value={getId} readOnly></Input> : ""}
+            </Form.Item> */}
           </div>
 
           <Form.Item className="form-btn">
@@ -224,7 +297,7 @@ const PatientModal = () => {
               htmlType="submit"
               className="shake-btn"
             >
-              Sign Up
+              Add Patient
             </Button>
           </Form.Item>
         </Form>
