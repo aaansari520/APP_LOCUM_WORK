@@ -97,7 +97,6 @@ export const getUser = createAsyncThunk(
       console.log("OBJECT", Obj);
       return Obj;
     } catch (error) {
-      console.log("dggdfdfsdfsdfsd", error);
       return thunkAPI.rejectWithValue(error);
     }
   }

@@ -1,13 +1,4 @@
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Upload,
-  Spin,
-} from "antd";
+import { Button, DatePicker, Form, Input, Modal, Select, Upload } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -20,11 +11,11 @@ import {
   updateId,
 } from "../../Redux/patientSlice";
 import { UploadOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const PatientModal = () => {
-  const { open, patient, surgery } = useSelector((store) => store.patient);
+  const { open, surgery } = useSelector((store) => store.patient);
   const [searchedSurgery, setSearchedSurgery] = useState(null);
 
   var navigate = useNavigate();
@@ -36,7 +27,6 @@ const PatientModal = () => {
     dispatch(cancle());
     navigate("/table");
   };
-  // console.log("gettingID", getId);
 
   const gettingID = (id) => {
     dispatch(updateId(id));
@@ -48,18 +38,6 @@ const PatientModal = () => {
       onSuccess("ok");
     }, 0);
   };
-
-  //   useEffect(() => {
-  //     navigate("/table");
-  //   }, [patient]);
-
-  // useEffect(() => {
-  //   if (!getId) {
-  //     setSurID(1);
-  //   } else if (getId) {
-  //     setSurID(getId);
-  //   }
-  // }, [getId]);
 
   useEffect(() => {
     const delaySearch = setTimeout(() => {
@@ -80,22 +58,13 @@ const PatientModal = () => {
   }, [searchedSurgery]);
 
   return (
-    <Modal
-      open={open}
-      title="Add Patient"
-      //   onOk={handleOk}
-      onCancel={handleCancel}
-      footer=""
-    >
+    <Modal open={open} title="Add Patient" onCancel={handleCancel} footer="">
       <div className="form-Design">
         <Form
           className="Form"
           // autoComplete="off"
           labelCol={{ span: 10 }}
           wrapperCol={{ span: 12 }}
-          // initialValues={{
-          //   surgery_id: surID,
-          // }}
           onFinish={(values) => {
             dispatch(addPatients(values));
             console.log("Patient Data", values);
@@ -188,18 +157,19 @@ const PatientModal = () => {
                 {
                   whitespace: true,
                 },
-                { min: 13, message: "Phone must contain 13 numbers" },
-                { max: 14, message: "Limit exceeded" },
+                { min: 13, message: "Phone must contain 10 digits only!" },
+                { max: 13, message: "Limit exceeded" },
               ]}
               hasFeedback
             >
-              <Input placeholder="Type your phone no."></Input>
+              <PhoneInput
+                international
+                countryCallingCodeEditable={false}
+                placeholder="Type your phone no."
+              ></PhoneInput>
             </Form.Item>
             <Form.Item name="upload" label="Image">
-              <Upload
-                // action={"https://dev-api.alldaydr.com/api/doctor/patients.json"}
-                customRequest={dummyRequest}
-              >
+              <Upload customRequest={dummyRequest}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
             </Form.Item>
@@ -257,18 +227,9 @@ const PatientModal = () => {
                 filterOption={false}
                 onSearch={(e) => {
                   setSearchedSurgery(e);
-
                   console.log("setSearchedSurgery", e);
                 }}
-                onSelect={(sur) => {
-                  // setSurID(sur.id);
-                  console.log("Chalas Kya");
-                }}
-                // setSurID(e.target.id);
                 onChange={function (e) {
-                  console.log(this);
-                  console.log("shdshds", e);
-                  // setSurgeryValue();
                   gettingID(e);
                 }}
               >
@@ -285,9 +246,6 @@ const PatientModal = () => {
             <Form.Item name="securityAns" label="Security Answer" hasFeedback>
               <Input></Input>
             </Form.Item>
-            {/* <Form.Item name="surgery_id" label="Surgery_id" hasFeedback>
-              {getId ? <Input value={getId} readOnly></Input> : ""}
-            </Form.Item> */}
           </div>
 
           <Form.Item className="form-btn">

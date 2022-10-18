@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../Redux/userSlice";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const SignUp = () => {
   const { user, isLoading } = useSelector((store) => store.user);
@@ -105,12 +107,16 @@ const SignUp = () => {
               {
                 whitespace: true,
               },
-              { min: 13, message: "Phone must contain 13 numbers" },
-              { max: 14, message: "Limit exceeded" },
+              { min: 13, message: "Phone must contain 10 disgits only!" },
+              { max: 13, message: "Limit exceeded" },
             ]}
             hasFeedback
           >
-            <Input placeholder="Type your fullName"></Input>
+            <PhoneInput
+              international
+              countryCallingCodeEditable={false}
+              placeholder="Type your phone no."
+            ></PhoneInput>
           </Form.Item>
 
           <Form.Item
