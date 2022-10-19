@@ -31,8 +31,8 @@ const SignIn = () => {
         className="Form"
         autoCapitalize="true"
         // autoComplete="off"
-        labelCol={{ span: 10 }}
-        wrapperCol={{ span: 14 }}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 15 }}
         onFinish={(values) => {
           dispatch(loginUser(values));
           formRef.current.resetFields();
@@ -113,7 +113,6 @@ const SignIn = () => {
             type="primary"
             htmlType="submit"
             style={{ padding: "5px 50px" }}
-            className="shake-btn"
           >
             Sign In
           </Button>

@@ -395,8 +395,8 @@ body {
 .form-Design {
   width: 100%;
   margin-top: 50px;
-  /* justify-content: space-around;
-  align-items: center; */
+  max-width: 1200px;
+  display: grid;
 }
 .signinForm {
   width: 100%;
@@ -538,4 +538,21 @@ body {
 .ant-modal {
   max-width: 1000px;
   width: calc(100% - 20px) !important;
+}
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>...Modal_Header...<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+.ant-modal-header {
+  background-color: rgb(165, 62, 62);
+}
+.ant-modal-title {
+  font-size: large;
+  font-weight: 800;
+  color: black;
+}
+.ant-modal-close-x {
+  font-size: large;
+  font-weight: 800;
+  color: black;
+  border: none;
+  border-style: none;
 }

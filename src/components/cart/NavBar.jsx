@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/userSlice";
-import { toast } from "react-toastify";
 
 const NavBar = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -12,9 +11,7 @@ const NavBar = () => {
       {!auth ? (
         <>
           <Link to="/">
-            <h2 style={{ marginTop: "15px" }} className="shake-btn">
-              User Authentication App
-            </h2>
+            <h2 style={{ marginTop: "15px" }}>User Authentication App</h2>
           </Link>
           <Link to="/sign_in">
             <button className="common-nav-button green">Sign In</button>
@@ -22,9 +19,7 @@ const NavBar = () => {
         </>
       ) : (
         <Link to="/home">
-          <h2 style={{ marginTop: "15px" }} className="shake-btn">
-            The Shop For You
-          </h2>
+          <h2 style={{ marginTop: "15px" }}>The Shop For You</h2>
         </Link>
       )}
 

@@ -33,8 +33,8 @@ const SignUp = () => {
       <Form
         className="Form"
         // autoComplete="off"
-        labelCol={{ span: 10 }}
-        wrapperCol={{ span: 12 }}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 15 }}
         initialValues={{ role: "doctor" }}
         onFinish={(values) => {
           dispatch(registerUser(values));
@@ -53,9 +53,14 @@ const SignUp = () => {
                 message: "This Field is Required!",
               },
               {
+                pattern: new RegExp("^[a-zA-Z]+$"),
+                message:
+                  "This field accepts only alphabets, minimum 3 alphabets are required!",
+              },
+              {
                 whitespace: true,
               },
-              { min: 3, message: "Name must contain minimum 3 characters" },
+              { min: 3, message: false },
             ]}
             hasFeedback
           >
@@ -71,9 +76,14 @@ const SignUp = () => {
                 message: "This Field is Required!",
               },
               {
+                pattern: new RegExp("^[a-zA-Z]+$"),
+                message:
+                  "This field accepts only alphabets, minimum 3 alphabets are required!",
+              },
+              {
                 whitespace: true,
               },
-              { min: 3, message: "Name must contain minimum 3 characters" },
+              { min: 3, message: false },
             ]}
             hasFeedback
           >
@@ -107,7 +117,7 @@ const SignUp = () => {
               {
                 whitespace: true,
               },
-              { min: 13, message: "Phone must contain 10 disgits only!" },
+              { min: 13, message: "Phone must contain 10 digits only!" },
               { max: 13, message: "Limit exceeded" },
             ]}
             hasFeedback
@@ -222,7 +232,7 @@ const SignUp = () => {
         </div>
 
         <Form.Item className="form-btn">
-          <Button block type="primary" htmlType="submit" className="shake-btn">
+          <Button block type="primary" htmlType="submit">
             Sign Up
           </Button>
         </Form.Item>

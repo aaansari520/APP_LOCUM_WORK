@@ -14,6 +14,8 @@ import { UploadOutlined } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
+const { TextArea } = Input;
+
 const PatientModal = () => {
   const { open, surgery } = useSelector((store) => store.patient);
   const [searchedSurgery, setSearchedSurgery] = useState(null);
@@ -63,8 +65,8 @@ const PatientModal = () => {
         <Form
           className="Form"
           // autoComplete="off"
-          labelCol={{ span: 10 }}
-          wrapperCol={{ span: 12 }}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 15 }}
           onFinish={(values) => {
             dispatch(addPatients(values));
             console.log("Patient Data", values);
@@ -86,9 +88,14 @@ const PatientModal = () => {
                   message: "This Field is Required!",
                 },
                 {
+                  pattern: new RegExp("^[a-zA-Z]+$"),
+                  message:
+                    "This field accepts only alphabets, minimum 3 alphabets are required!",
+                },
+                {
                   whitespace: true,
                 },
-                { min: 3, message: "Name must contain minimum 3 characters" },
+                { min: 3, message: false },
               ]}
               hasFeedback
             >
@@ -103,9 +110,14 @@ const PatientModal = () => {
                   message: "This Field is Required!",
                 },
                 {
+                  pattern: new RegExp("^[a-zA-Z]+$"),
+                  message:
+                    "This field accepts only alphabets, minimum 3 alphabets are required!",
+                },
+                {
                   whitespace: true,
                 },
-                { min: 3, message: "Name must contain minimum 3 characters" },
+                { min: 3, message: false },
               ]}
               hasFeedback
             >
@@ -180,13 +192,13 @@ const PatientModal = () => {
               <Input placeholder="Type your Add. Name"></Input>
             </Form.Item>
             <Form.Item name="addL1" label="Add. Line 1" hasFeedback>
-              <Input placeholder="Type your Add. Line 1"></Input>
+              <TextArea placeholder="Type your Add. Line 1"></TextArea>
             </Form.Item>
             <Form.Item name="addL2" label="Add. Line 2" hasFeedback>
-              <Input placeholder="Type your Add. Line 2"></Input>
+              <TextArea placeholder="Type your Add. Line 2"></TextArea>
             </Form.Item>
             <Form.Item name="addL3" label="Add. Line 3" hasFeedback>
-              <Input placeholder="Type your Add. Line 3"></Input>
+              <TextArea placeholder="Type your Add. Line 3"></TextArea>
             </Form.Item>
 
             <Form.Item
@@ -243,18 +255,23 @@ const PatientModal = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item name="securityAns" label="Security Answer" hasFeedback>
+            <Form.Item
+              name="securityAns"
+              label="Security Answer"
+              rules={[
+                {
+                  required: true,
+                  message: "This Field is Required!",
+                },
+              ]}
+              hasFeedback
+            >
               <Input></Input>
             </Form.Item>
           </div>
 
           <Form.Item className="form-btn">
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
-              className="shake-btn"
-            >
+            <Button block type="primary" htmlType="submit">
               Add Patient
             </Button>
           </Form.Item>

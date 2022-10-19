@@ -29,14 +29,12 @@ const Verify = () => {
     <div className="form-Design signinForm">
       <div className="nav-bar">
         <Link to="/verify">
-          <h2 style={{ marginTop: "15px" }} className="shake-btn">
-            Verify to your self...
-          </h2>
+          <h2 style={{ marginTop: "15px" }}>Verify to your self...</h2>
         </Link>
 
         <Link to="/sign_in">
           <button
-            className="common-nav-button green shake-btn"
+            className="common-nav-button green "
             onClick={() => dispatch(notVerified())}
           >
             Sign In
@@ -111,7 +109,6 @@ const Verify = () => {
             type="primary"
             htmlType="submit"
             style={{ padding: "5px 50px" }}
-            className="shake-btn"
           >
             Submit
           </Button>

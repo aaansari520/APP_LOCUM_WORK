@@ -49,8 +49,6 @@ export const registerUser = createAsyncThunk(
     formData.append("device_detail[device_type]", user.deviceType);
     formData.append("device_detail[player_id]", user.player_id);
 
-    // console.log("Form DAta mila ke nahi ", Object.fromEntries(formData));
-
     try {
       const resp = await customFetch({
         url: `api/users/sign_up.json`,
@@ -84,9 +82,8 @@ export const getUser = createAsyncThunk(
         },
       });
 
-      let Pagination = JSON.parse(resp.headers["x-pagination"]);
-      console.log("getUser me response", resp.headers["x-pagination"]);
-      console.log("Pagination me kya milraha hai", Pagination.total_pages);
+      const result = resp.headers["x-pagination"];
+      let Pagination = result ? JSON.parse(result) : null;
 
       let Obj = {
         pageData: Pagination,
@@ -196,10 +193,6 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [registerUser.fulfilled]: (state, actions) => {
-      // console.log(
-      //   "registerUser.fulfilled",
-      //   actions.payload?.data.user.auth_token
-      // );
       console.log("ACtions in register", actions.payload.status);
 
       if (actions.payload.status === 200) {
@@ -255,6 +248,7 @@ const userSlice = createSlice({
         state.isLoading = false;
       } else if (actions.payload.status !== 200) {
         state.isLoading = false;
+        removeEmailFromLocalStorage();
         toast.error(`${actions.payload.message}`);
       }
     },
@@ -266,17 +260,32 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [logOutUser.fulfilled]: (state, actions) => {
-      state.user = null;
-      state.auth = null;
-      state.userData = null;
-      state.email = null;
-      removeEmailFromLocalStorage();
-      removeAuthTokenFromLocalStorage();
-      removeUserFromLocalStorage();
-      removeVerifyAuthTokenFromLocalStorage();
-      removePatientsFromLocalStorage();
-      toast.success(`${actions.payload.message}`);
-      state.isLoading = false;
+      console.log("logOutUser.fulfilled", actions);
+      if (actions.payload.status === 200) {
+        state.user = null;
+        state.auth = null;
+        state.userData = null;
+        state.email = null;
+        removeEmailFromLocalStorage();
+        removeAuthTokenFromLocalStorage();
+        removeUserFromLocalStorage();
+        removeVerifyAuthTokenFromLocalStorage();
+        removePatientsFromLocalStorage();
+        toast.success(`${actions.payload.message}`);
+        state.isLoading = false;
+      } else {
+        state.user = null;
+        state.auth = null;
+        state.userData = null;
+        state.email = null;
+        removeEmailFromLocalStorage();
+        removeAuthTokenFromLocalStorage();
+        removeUserFromLocalStorage();
+        removeVerifyAuthTokenFromLocalStorage();
+        removePatientsFromLocalStorage();
+        toast.error(`${actions.payload.message}`);
+        state.isLoading = false;
+      }
     },
     [logOutUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
@@ -285,28 +294,24 @@ const userSlice = createSlice({
     [getUser.pending]: (state) => {
       state.isLoading = true;
     },
-
     [getUser.fulfilled]: (state, { payload }) => {
-      console.log("Payload me kya miola", payload);
+      console.log("Payload me kya mila", payload);
       const { pageData, respDataData, respData } = payload;
       console.log("Payload Destructure", respData);
 
       if (respData.status === 200) {
         state.show = true;
-        // console.log(actions);
         console.log("User Data", payload);
         console.log("ACtions in get user", respData);
-        // state.userData = actions.payload.data;
         state.userData = respDataData;
         state.totalPages = pageData.total_pages;
         state.total = pageData.total;
         addPatientToLocalStorage(state.userData);
         state.showPatient = true;
-        // toast.success(`${actions.payload.message}`);
+        toast.success(`${respData.message}`);
         state.isLoading = false;
       } else {
         toast.error(`${respData.message}`);
-        // toast.error(`U are not authorised`);
         state.isLoading = false;
       }
     },
