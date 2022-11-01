@@ -7,7 +7,6 @@ import {
   cancle,
   getSurgery,
   removeSurgery,
-  reset,
   updateId,
 } from "../../Redux/patientSlice";
 import { UploadOutlined } from "@ant-design/icons";

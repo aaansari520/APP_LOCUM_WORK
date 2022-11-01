@@ -5,7 +5,6 @@ import {
   addSurgeryIDToLocalStorage,
   addSurgeryToLocalStorage,
   getSurgeryFromLocalStorage,
-  getSurgeryIDFromLocalStorage,
   getVerifyAuthTokenFromLocalStorage,
   removeSurgeryFromLocalStorage,
   removeSurgeryIDFromLocalStorage,

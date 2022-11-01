@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { registerUser } from "../Redux/userSlice";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import en from "react-phone-number-input/locale/en";
 
 const SignUp = () => {
   const { user, isLoading } = useSelector((store) => store.user);
@@ -123,6 +124,8 @@ const SignUp = () => {
             hasFeedback
           >
             <PhoneInput
+              label={en}
+              defaultCountry="IN"
               international
               countryCallingCodeEditable={false}
               placeholder="Type your phone no."

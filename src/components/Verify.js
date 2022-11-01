@@ -17,14 +17,6 @@ const Verify = () => {
     }
   }, [auth]);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     setTimeout(() => {
-  //       navigate("/sign_in");
-  //     });
-  //   }
-  // }, []);
-
   return (
     <div className="form-Design signinForm">
       <div className="nav-bar">

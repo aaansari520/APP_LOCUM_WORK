@@ -1,11 +1,43 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/userSlice";
+import { Button, Dropdown, Menu } from "antd";
 
 const NavBar = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { auth } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: "1",
+          label: <Link to="/profile">Profile</Link>,
+        },
+        {
+          key: "2",
+          label: <Link to="/changePass">Change Password</Link>,
+        },
+        {
+          key: "3",
+          label: <Link to="/table">Patients</Link>,
+        },
+        {
+          key: "4",
+          label: (
+            <button
+              style={{ border: "none", background: "white" }}
+              onClick={() => dispatch(logOutUser())}
+            >
+              Logout
+            </button>
+          ),
+        },
+      ]}
+    />
+  );
+
   return (
     <div className="nav-bar">
       {!auth ? (
@@ -48,16 +80,24 @@ const NavBar = () => {
 
       {auth ? (
         <>
-          <Link to="/table">
+          {/* <Link to="/table">
             <button className="common-nav-button blue">Patients</button>
-          </Link>
+          </Link> */}
 
-          <button
+          {/* <Link to="/profile">
+            <button className="common-nav-button blue">Profile</button>
+          </Link> */}
+
+          {/* <button
             onClick={() => dispatch(logOutUser())}
             className="common-nav-button red"
           >
             {auth ? "Logout" : ""}
-          </button>
+          </button> */}
+
+          <Dropdown overlay={menu} placement="bottomRight" arrow>
+            <Button style={{ color: "black" }}>MoreOptions</Button>
+          </Dropdown>
         </>
       ) : (
         ""

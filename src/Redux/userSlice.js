@@ -5,15 +5,20 @@ import {
   addAuthTokenToLocalStorage,
   addEmailToLocalStorage,
   addPatientToLocalStorage,
+  addUserDataToLocalStorage,
   addUserToLocalStorage,
   addVerifyAuthTokenToLocalStorage,
   getEmailFromLocalStorage,
   getPatientsFromLocalStorage,
+  getUserDataFromLocalStorage,
   getUserFromLocalStorage,
   getVerifyAuthTokenFromLocalStorage,
   removeAuthTokenFromLocalStorage,
   removeEmailFromLocalStorage,
   removePatientsFromLocalStorage,
+  removePostalFromLocalStorage,
+  removePostal2FromLocalStorage,
+  removeUserDataFromLocalStorage,
   removeUserFromLocalStorage,
   removeVerifyAuthTokenFromLocalStorage,
 } from "../localStorage/LocalStorageData";
@@ -23,13 +28,15 @@ const initialState = {
   user: getUserFromLocalStorage(),
   auth: getVerifyAuthTokenFromLocalStorage(),
   showNav: true,
-  userData: getPatientsFromLocalStorage(),
+  // userData: getPatientsFromLocalStorage(),
+  patientData: getPatientsFromLocalStorage(),
   showPatient: false,
   searchValue: "",
   email: getEmailFromLocalStorage(),
   totalPages: null,
   total: null,
   show: false,
+  userData: getUserDataFromLocalStorage(),
 };
 
 export const registerUser = createAsyncThunk(
@@ -112,6 +119,7 @@ export const loginUser = createAsyncThunk(
       },
       user: { email: user.email, password: user.password },
     };
+
     try {
       const resp = await customFetch({
         url: "/api/users/sign_in.json",
@@ -174,7 +182,8 @@ const userSlice = createSlice({
     },
     searchBased: (state, actions) => {
       console.log("searchedText in reducer", actions.payload);
-      state.userData = null;
+      state.patientData = null;
+      state.userData = getUserDataFromLocalStorage();
       state.totalPages = null;
       state.total = null;
       state.show = false;
@@ -218,7 +227,50 @@ const userSlice = createSlice({
     },
     [verifyUser.fulfilled]: (state, actions) => {
       if (actions.payload.status === 200) {
+        console.log("verifyUser.fulfilled USER DATA", actions.payload.data);
         state.showNav = true;
+        const gettingUserData = actions.payload.data.user;
+        const {
+          id,
+          first_name,
+          last_name,
+          email,
+          gender,
+          phone,
+          role,
+          address,
+        } = gettingUserData;
+        console.log("gettingUserData me address", address);
+        const { line1, line2, name, pincode, town } = address;
+        addUserDataToLocalStorage({
+          id,
+          first_name,
+          last_name,
+          email,
+          gender,
+          phone,
+          role,
+          line1,
+          line2,
+          name,
+          pincode,
+          town,
+        });
+        state.userData = {
+          id,
+          first_name,
+          last_name,
+          email,
+          gender,
+          phone,
+          role,
+          line1,
+          line2,
+          name,
+          pincode,
+          town,
+        };
+        console.log("gettingUserData ", gettingUserData);
         const verifyAuthToken = actions.payload?.data.user.auth_token;
         addVerifyAuthTokenToLocalStorage(verifyAuthToken);
         state.auth = verifyAuthToken;
@@ -271,6 +323,9 @@ const userSlice = createSlice({
         removeUserFromLocalStorage();
         removeVerifyAuthTokenFromLocalStorage();
         removePatientsFromLocalStorage();
+        removeUserDataFromLocalStorage();
+        removePostalFromLocalStorage();
+        removePostal2FromLocalStorage();
         toast.success(`${actions.payload.message}`);
         state.isLoading = false;
       } else {
@@ -283,6 +338,9 @@ const userSlice = createSlice({
         removeUserFromLocalStorage();
         removeVerifyAuthTokenFromLocalStorage();
         removePatientsFromLocalStorage();
+        removeUserDataFromLocalStorage();
+        removePostalFromLocalStorage();
+        removePostal2FromLocalStorage();
         toast.error(`${actions.payload.message}`);
         state.isLoading = false;
       }
@@ -303,10 +361,12 @@ const userSlice = createSlice({
         state.show = true;
         console.log("User Data", payload);
         console.log("ACtions in get user", respData);
-        state.userData = respDataData;
+        // state.userData = respDataData;
+        state.patientData = respDataData;
+
         state.totalPages = pageData.total_pages;
         state.total = pageData.total;
-        addPatientToLocalStorage(state.userData);
+        addPatientToLocalStorage(state.patientData);
         state.showPatient = true;
         toast.success(`${respData.message}`);
         state.isLoading = false;

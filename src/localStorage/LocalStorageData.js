@@ -1,7 +1,5 @@
 // >>>>>>>>>>>>>>>>>>>...The USER...<<<<<<<<<<<<<<<<
 
-import { toast } from "react-toastify";
-
 export const addUserToLocalStorage = (user) => {
   localStorage.setItem("user", JSON.stringify(user));
   //   localStorage.setItem("user", user);
@@ -123,4 +121,89 @@ export const getSurgeryIDFromLocalStorage = () => {
 
 export const removeSurgeryIDFromLocalStorage = () => {
   localStorage.removeItem("surgeryID");
+};
+
+// >>>>>>>>>>>>>>>>>>>>...USER DATA AFTER VERIFY...<<<<<<<<<<<<<<<
+
+export const addUserDataToLocalStorage = (user) => {
+  localStorage.setItem("userDATA", JSON.stringify(user));
+};
+
+export const getUserDataFromLocalStorage = () => {
+  const result = localStorage.getItem("userDATA");
+  const userData = result ? JSON.parse(result) : null;
+
+  return userData;
+};
+
+export const removeUserDataFromLocalStorage = () => {
+  localStorage.removeItem("userDATA");
+};
+
+// >>>>>>>>>>>>>>>>>>>>...Specialities ID...<<<<<<<<<<<<<<<
+
+export const addSpecialitiesToLocalStorage = (specialities) => {
+  localStorage.setItem("specialities", JSON.stringify(specialities));
+};
+
+export const getSpecialitiesFromLocalStorage = () => {
+  const result = localStorage.getItem("specialities");
+  const Specialities = result ? JSON.parse(result) : null;
+
+  return Specialities;
+};
+
+export const removeSpecialitiesFromLocalStorage = () => {
+  localStorage.removeItem("specialities");
+};
+
+// >>>>>>>>>>>>>>>>>>>>...Languages ID...<<<<<<<<<<<<<<<
+
+export const addLanguagesToLocalStorage = (Languages) => {
+  localStorage.setItem("languages", JSON.stringify(Languages));
+};
+
+export const getLanguagesFromLocalStorage = () => {
+  const result = localStorage.getItem("languages");
+  const Languages = result ? JSON.parse(result) : null;
+
+  return Languages;
+};
+
+export const removeLanguagesFromLocalStorage = () => {
+  localStorage.removeItem("languages");
+};
+
+// >>>>>>>>>>>>>>>>>>>>...Postal Code 1...<<<<<<<<<<<<<<<
+
+export const addPostalToLocalStorage = (postal) => {
+  localStorage.setItem("postal", JSON.stringify(postal));
+};
+
+export const getPostalFromLocalStorage = () => {
+  const result = localStorage.getItem("postal");
+  const Postal = result ? JSON.parse(result) : null;
+
+  return Postal;
+};
+
+export const removePostalFromLocalStorage = () => {
+  localStorage.removeItem("postal");
+};
+
+// >>>>>>>>>>>>>>>>>>>>...Postal Code 2...<<<<<<<<<<<<<<<
+
+export const addPostal2ToLocalStorage = (postal2) => {
+  localStorage.setItem("postal2", JSON.stringify(postal2));
+};
+
+export const getPostal2FromLocalStorage = () => {
+  const result = localStorage.getItem("postal2");
+  const Postal2 = result ? JSON.parse(result) : null;
+
+  return Postal2;
+};
+
+export const removePostal2FromLocalStorage = () => {
+  localStorage.removeItem("postal2");
 };

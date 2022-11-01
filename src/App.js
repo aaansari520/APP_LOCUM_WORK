@@ -14,6 +14,8 @@ import SignIn from "./components/Sign_in";
 
 import PatientTable from "./components/table/Table";
 import PatientModal from "./components/modal/PatientModal";
+import Profile from "./components/inside/Profile";
+import ResetPass from "./components/inside/ResetPassword";
 
 function App() {
   const { showNav, auth } = useSelector((store) => store.user);
@@ -43,6 +45,8 @@ function App() {
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/table" element={<PatientTable />} />
           <Route path="/modal" element={<PatientModal />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/changePass" element={<ResetPass />} />
         </Route>
       </Routes>
       <ToastContainer />

@@ -556,3 +556,16 @@ body {
   border: none;
   border-style: none;
 }
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>...Full length...<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+
+.inner-special {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 800px;
+}
+.inner-special .ant-col-15 {
+  max-width: 95% !important;
+  margin-top: 0px;
+}

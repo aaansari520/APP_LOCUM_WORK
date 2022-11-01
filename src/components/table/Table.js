@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { openModal } from "../../Redux/patientSlice";
 
 const PatientTable = () => {
-  const { userData, isLoading, total, show } = useSelector(
+  const { patientData, isLoading, total, show } = useSelector(
     (state) => state.user
   );
   const { open } = useSelector((store) => store.patient);
@@ -134,7 +134,7 @@ const PatientTable = () => {
       {show ? (
         <Table
           loading={isLoading}
-          dataSource={userData}
+          dataSource={patientData}
           columns={columns}
           pagination={{
             total: total,
